@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TAI FOOD｜讓世界看見台灣的味道</title>
+<meta name="description" content="TAI FOOD 是專為台灣街頭小吃打造的美食地圖，從鹹點、甜點到飲品，一鍵找到最對味的那一攤。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ░░░ 開場 Hero（點擊開始） ░░░ -->
+<section id="splash" class="splash" aria-label="TAI FOOD 開場主視覺">
+  <img class="splash__bg" src="assets/1.png" alt="TAI FOOD 主視覺 — 台灣經典小吃環繞中央 LOGO" />
+  <div class="splash__scroll" aria-hidden="true">SCROLL ↓</div>
+</section>
+
+<!-- ░░░ 導覽列 ░░░ -->
+<header id="navbar" class="navbar" aria-label="主導覽">
+  <a href="#top" class="navbar__brand" aria-label="回到首頁">
+    <img src="assets/3.png" alt="TAI FOOD" />
+    <span class="navbar__brand-text">TAI<br/>FOOD</span>
+  </a>
+  <nav class="navbar__menu" aria-label="主選單">
+    <a href="#home">首頁</a>
+    <a href="#salty">鹹點</a>
+    <a href="#sweet">甜點</a>
+    <a href="#drink">飲品</a>
+    <a href="#daily">今天吃啥</a>
+    <a href="#passport">集點卡</a>
+    <a href="#story">品牌故事</a>
+    <a href="#contact">聯絡</a>
+  </nav>
+  <button id="navToggle" class="navbar__toggle" type="button" aria-label="開啟選單" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main id="top">
+
+  <!-- ░░░ 搜尋／主標題區（大爆版） ░░░ -->
+  <section id="home" class="hero hero--boom" data-parallax-root>
+    <!-- 背景層：金色光暈 + 紅色色階 -->
+    <div class="hero__sun" aria-hidden="true"></div>
+    <div class="hero__grain" aria-hidden="true"></div>
+
+    <!-- 裝飾層：漣漪（會跟著滑鼠視差） — 4.png 雲為白底 PNG 會產生米色方塊，已移除 -->
+    <div class="hero__bgdecor" aria-hidden="true">
+      <img class="hero__ripple hero__ripple--1" src="assets/6.png" alt="" data-depth="0.04" />
+      <img class="hero__ripple hero__ripple--2" src="assets/7.png" alt="" data-depth="0.08" />
+      <img class="hero__ripple hero__ripple--3" src="assets/7.png" alt="" data-depth="0.12" />
+    </div>
+
+    <!-- 品牌圓形 LOGO 浮水印（標題後方，低透明度） -->
+    <img class="hero__watermark" src="assets/3.png" alt="" aria-hidden="true" data-depth="0.03" />
+
+    <!-- 食物爆炸拼貼層（9 道精選散落於右側，左側標題欄淨空） -->
+    <div class="hero__feast" aria-hidden="true">
+      <div class="hero__food hero__food--1"  data-depth="0.08" style="--delay:120ms"><img src="assets/foods/salty/牛肉麵/main.png" alt=""/></div>
+      <div class="hero__food hero__food--2"  data-depth="0.05" style="--delay:60ms"><img src="assets/foods/sweet/芒果冰/main.png" alt=""/></div>
+      <div class="hero__food hero__food--3"  data-depth="0.12" style="--delay:200ms"><img src="assets/foods/salty/蚵仔煎/main.png" alt=""/></div>
+      <div class="hero__food hero__food--4"  data-depth="0.06" style="--delay:280ms"><img src="assets/foods/sweet/豆花/main.png" alt=""/></div>
+      <div class="hero__food hero__food--5"  data-depth="0.15" style="--delay:360ms"><img src="assets/foods/salty/雞排/main.png" alt=""/></div>
+      <div class="hero__food hero__food--9"  data-depth="0.10" style="--delay:480ms"><img src="assets/foods/salty/胡椒餅/main.png" alt=""/></div>
+      <div class="hero__food hero__food--10" data-depth="0.06" style="--delay:560ms"><img src="assets/foods/sweet/糖葫蘆/main.png" alt=""/></div>
+      <div class="hero__food hero__food--11" data-depth="0.11" style="--delay:640ms"><img src="assets/foods/salty/滷肉飯/main.png" alt=""/></div>
+      <div class="hero__food hero__food--12" data-depth="0.08" style="--delay:720ms"><img src="assets/foods/sweet/芋圓-地瓜圓/main.png" alt=""/></div>
+    </div>
+
+    <!-- 角落印章 -->
+    <div class="hero__stamp" aria-hidden="true">
+      <span class="hero__stamp-zh">食</span>
+      <span class="hero__stamp-en">No.001 · STREET</span>
+    </div>
+
+    <div class="hero__inner">
+      <p class="hero__eyebrow">
+        <span class="hero__eyebrow-dot"></span>
+        🇹🇼 TAI FOOD｜Taiwan Street Food Guide 🧋
+      </p>
+      <h1 class="hero__title">
+        <span class="hero__title-line">想知道哪裡</span>
+        <span class="hero__title-line">有<span class="hero__title-accent" data-text="美食">美食</span>？</span>
+      </h1>
+      <p class="hero__lede">讓世界看見台灣的味道——從清晨豆漿到深夜麵線，一鍵找齊。</p>
+
+      <form id="searchForm" class="search" role="search" aria-label="美食搜尋">
+        <label class="search__field">
+          <span class="search__icon" aria-hidden="true">🍜</span>
+          <input id="searchKeyword" type="search" placeholder="美食分類、餐廳…" autocomplete="off" />
+        </label>
+        <label class="search__field">
+          <span class="search__icon" aria-hidden="true">📍</span>
+          <input id="searchLocation" type="search" placeholder="搜尋地點" autocomplete="off" />
+        </label>
+        <button type="submit" class="search__submit" aria-label="送出搜尋">
+          <span>SEARCH</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M10 2a8 8 0 1 1-5.29 14.01l-3.35 3.35-1.41-1.41 3.35-3.35A8 8 0 0 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
+        </button>
+      </form>
+
+      <div class="hero__tags" aria-label="熱門關鍵字">
+        <span class="hero__tags-label">熱門搜尋</span>
+        <ul class="tags">
+          <li><button type="button" data-tag="小吃">小吃</button></li>
+          <li><button type="button" data-tag="飲料">飲料</button></li>
+          <li><button type="button" data-tag="牛肉麵">牛肉麵</button></li>
+          <li><button type="button" data-tag="冰沙">冰沙</button></li>
+          <li><button type="button" data-tag="珍奶">珍奶</button></li>
+          <li><button type="button" data-tag="刈包">刈包</button></li>
+          <li><button type="button" data-tag="蚵仔煎">蚵仔煎</button></li>
+          <li><button type="button" data-tag="鹽酥雞">鹽酥雞</button></li>
+        </ul>
+      </div>
+
+      <output id="searchOutput" class="search__output" role="status" aria-live="polite"></output>
+    </div>
+  </section>
+
+  <!-- ░░░ 搜尋結果（假資料店家） ░░░ -->
+  <section id="results" class="results" aria-label="搜尋結果" hidden>
+    <div class="results__inner">
+      <div class="results__bar">
+        <p id="resultsHead" class="results__head" role="status" aria-live="polite"></p>
+        <button type="button" id="resultsClear" class="results__clear">清除搜尋 ✕</button>
+      </div>
+      <div id="resultsGrid" class="results__grid"></div>
+      <p id="resultsEmpty" class="results__empty" hidden></p>
+    </div>
+  </section>
+
+  <!-- ░░░ 分類三大支柱 ░░░ -->
+  <section class="pillars" aria-label="美食三大分類">
+    <div class="pillars__grid">
+      <a href="#salty" class="pillar pillar--salty">
+        <span class="pillar__num">01</span>
+        <h2>鹹點</h2>
+        <p>Salty Bites</p>
+        <small>從早餐到夜市，鹹香蛋白質的快樂。</small>
+      </a>
+      <a href="#sweet" class="pillar pillar--sweet">
+        <span class="pillar__num">02</span>
+        <h2>甜點</h2>
+        <p>Sweet Treats</p>
+        <small>豆花、麻糬、紅豆湯——糖份是另一個胃。</small>
+      </a>
+      <a href="#drink" class="pillar pillar--drink">
+        <span class="pillar__num">03</span>
+        <h2>飲品</h2>
+        <p>Drinks</p>
+        <small>珍奶、青茶、冬瓜茶——台灣的液態靈魂。</small>
+      </a>
+    </div>
+  </section>
+
+  <!-- ░░░ 鹹點 ░░░ -->
+  <section id="salty" class="cat cat--salty">
+    <div class="cat__head">
+      <p class="cat__eyebrow">CATEGORY · 01</p>
+      <h2 class="cat__title">鹹 · 點</h2>
+      <p class="cat__lede">街頭巷尾的鹹香記憶，從蒸籠到鐵板，台灣人一天的能量來源。</p>
+    </div>
+    <div class="dish-grid" data-cat="salty">
+      <!-- 由 script.js 依 data.js 產生 -->
+    </div>
+  </section>
+
+  <!-- ░░░ 甜點 ░░░ -->
+  <section id="sweet" class="cat cat--sweet">
+    <div class="cat__head">
+      <p class="cat__eyebrow">CATEGORY · 02</p>
+      <h2 class="cat__title">甜 · 點</h2>
+      <p class="cat__lede">糖份是另一個胃，從冰品到傳統糕點，每一口都是時光機。轉動圓桌，挑一道。</p>
+    </div>
+    <!-- 圓桌轉盤：高軌道內 sticky 釘住，捲動驅動旋轉（由 script.js 產生盤子） -->
+    <div class="tt-track" id="sweetTrack">
+      <div class="tt-sticky">
+        <div class="turntable" id="sweetTurntable" role="list" aria-label="甜點圓桌">
+          <div class="tt-hub" aria-hidden="true">
+            <span class="tt-hub__label">甜 · 點</span>
+            <span class="tt-hub__name" id="ttFront"></span>
+            <span class="tt-hub__hint">↓ 捲動轉盤</span>
+          </div>
+          <!-- .tt-plate × 8 由 script.js 依 data.js 產生 -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ 飲品 ░░░ -->
+  <section id="drink" class="cat cat--drink">
+    <div class="cat__head">
+      <p class="cat__eyebrow">CATEGORY · 03</p>
+      <h2 class="cat__title">飲 · 品</h2>
+      <p class="cat__lede">珍奶征服世界，但這座島嶼還有更多液態驚喜——從清晨豆漿到深夜青茶。</p>
+    </div>
+    <!-- 橫向展開手風琴：滑到／點選展開（由 script.js 依 data.js 產生） -->
+    <div class="panels" id="drinkPanels" role="list" aria-label="飲品面板">
+      <!-- .panel × 6 -->
+    </div>
+  </section>
+
+  <!-- ░░░ 每日一食「今天吃啥?」 ░░░ -->
+  <section id="daily" class="daily" aria-label="今天吃啥 隨機推薦">
+    <div class="cat__head">
+      <p class="cat__eyebrow">DAILY PICK</p>
+      <h2 class="cat__title">今天吃啥?</h2>
+      <p class="cat__lede">選擇困難？讓骰子幫你決定一道台灣美食。系統隨機推薦，且最近三天不重複，每天都新鮮。</p>
+    </div>
+
+    <div class="daily__wrap">
+      <!-- 左：擲骰卡 -->
+      <div class="daily__roller">
+        <p class="roller__date" id="rollerDate"></p>
+        <div class="roller__stage" id="rollerStage" aria-live="polite">
+          <!-- 由 script.js 渲染：閒置骰子 / 輪播 / 結果 -->
+        </div>
+        <button type="button" id="rollBtn" class="roller__btn">🎲 擲骰決定！</button>
+        <p class="roller__hint">已避開最近三天吃過的</p>
+      </div>
+
+      <!-- 右：本月月曆 -->
+      <div class="daily__cal">
+        <div class="cal__head">
+          <h3 class="cal__title" id="calTitle"></h3>
+        </div>
+        <div class="cal__weekdays" aria-hidden="true">
+          <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+        </div>
+        <div class="cal__grid" id="calGrid" role="grid"><!-- 由 script.js 產生 --></div>
+        <p class="cal__caption" id="calCaption" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ 美食護照集點 ░░░ -->
+  <section id="passport" class="passport" aria-label="美食護照集點">
+    <div class="passport__head">
+      <div class="cat__head" style="margin-bottom:0">
+        <p class="cat__eyebrow">FOOD PASSPORT</p>
+        <h2 class="cat__title">累積點數並記錄你吃過的美食</h2>
+        <p class="cat__lede">每吃過一道就蓋一個章，每章 +10 點。湊滿 33 道，蒐集你的台灣味成就。</p>
+      </div>
+      <div class="pscore" aria-hidden="true">
+        <span class="pscore__num" id="pPoints">0</span>
+        <span class="pscore__label">點</span>
+      </div>
+    </div>
+
+    <div class="passport__bar">
+      <div class="pbar"><span class="pbar__fill" id="pBarFill"></span></div>
+      <p class="pbar__text" id="pBarText">已收集 0 / 33</p>
+    </div>
+
+    <div class="pfilters" id="pFilters" role="tablist" aria-label="分類篩選">
+      <button class="pfilter is-active" data-filter="all" role="tab" aria-selected="true">全部</button>
+      <button class="pfilter" data-filter="salty" role="tab" aria-selected="false">鹹點</button>
+      <button class="pfilter" data-filter="sweet" role="tab" aria-selected="false">甜點</button>
+      <button class="pfilter" data-filter="drink" role="tab" aria-selected="false">飲品</button>
+    </div>
+
+    <div class="pgrid" id="pGrid"><!-- 33 收藏卡由 script.js 產生 --></div>
+  </section>
+
+  <!-- ░░░ 品牌故事 ░░░ -->
+  <section id="story" class="story" aria-label="品牌故事">
+    <div class="story__wrap">
+      <div class="story__visual">
+        <img src="assets/3.png" alt="TAI FOOD 圓形 LOGO" />
+        <div class="story__visual-bg" aria-hidden="true"></div>
+      </div>
+      <div class="story__copy">
+        <p class="story__eyebrow">BRAND STORY</p>
+        <h2>一杯手搖珍珠奶茶，<br/>就是台灣寫給世界的情書。</h2>
+        <p>核心視覺：我們以台灣最具代表性的「手搖珍珠奶茶」作為 LOGO 主視覺。</p>
+        <p>設計說明：中心直線條代表吸管，並透過底部錯落分布的小圓點生動呈現「珍珠」這一視覺焦點。外圍則結合叉子的造型，象徵飲食文化——傳統與當代、東方與全球，在一杯飲料裡完成對話。</p>
+        <ul class="story__list">
+          <li><strong>傳承</strong>·三代職人手感，從茶湯到糕點。</li>
+          <li><strong>連結</strong>·把每一條巷子的香氣，傳到地圖上的另一端。</li>
+          <li><strong>分享</strong>·讓世界看見台灣，從一口刈包開始。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ 聯絡 ░░░ -->
+  <section id="contact" class="contact" aria-label="聯絡資訊">
+    <div class="contact__inner">
+      <h2>準備好嘗一口了嗎？</h2>
+      <p>留下你的 Email，每週收到一張我們親自走訪、攝氏 38 度蹲在攤前拍出來的台灣味地圖。</p>
+      <form id="contactForm" class="contact__form" novalidate>
+        <label class="contact__field">
+          <span>Email</span>
+          <input id="contactEmail" type="email" placeholder="you@example.com" required />
+        </label>
+        <button type="submit">訂閱地圖</button>
+      </form>
+      <output id="contactOutput" class="contact__output" role="status" aria-live="polite"></output>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <img src="assets/3.png" alt="TAI FOOD" />
+      <p>TAI FOOD · 讓世界看見台灣的味道</p>
+    </div>
+    <div class="footer__cols">
+      <div>
+        <h4>分類</h4>
+        <a href="#salty">鹹點</a>
+        <a href="#sweet">甜點</a>
+        <a href="#drink">飲品</a>
+      </div>
+      <div>
+        <h4>關於</h4>
+        <a href="#story">品牌故事</a>
+        <a href="#contact">聯絡我們</a>
+      </div>
+      <div>
+        <h4>追蹤</h4>
+        <a href="#" aria-label="Instagram">Instagram</a>
+        <a href="#" aria-label="Facebook">Facebook</a>
+        <a href="#" aria-label="YouTube">YouTube</a>
+      </div>
+    </div>
+  </div>
+  <p class="footer__copy">© 2026 TAI FOOD · 本網站為作業專案，所有插畫素材來自原作者。·
+    <a href="#" data-play-game class="footer__game">🎮 台味接接樂</a>
+  </p>
+</footer>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

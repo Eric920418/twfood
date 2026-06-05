@@ -1,0 +1,1769 @@
+/* ============================================================
+   TAI FOOD · styles.css
+   主色 #9b1f12 ｜ 米色 #f6e7c8 ｜ 金色 #d9a441 ｜ 深紅 #5b0d04
+   ============================================================ */
+
+:root{
+  --c-red:#9b1f12;
+  --c-red-deep:#5b0d04;
+  --c-red-soft:#b83a2b;
+  --c-cream:#f6e7c8;
+  --c-cream-deep:#ead0a3;
+  --c-gold:#d9a441;
+  --c-ink:#2b1410;
+  --c-paper:#fffaf0;
+  --shadow-card: 0 18px 40px -18px rgba(91,13,4,.55);
+  --shadow-soft: 0 6px 24px -10px rgba(0,0,0,.25);
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:10px;
+  --maxw:1240px;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{
+  margin:0;
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  color:var(--c-ink);
+  background:var(--c-red);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input{font-family:inherit}
+h1,h2,h3,h4{font-family:"Noto Serif TC",serif;font-weight:900;letter-spacing:.02em;margin:0}
+p{margin:0;line-height:1.75}
+ul{margin:0;padding:0;list-style:none}
+
+/* ============================================================
+   SPLASH（開場主視覺）— fixed overlay，避免影響下方 scroll 流
+   ============================================================ */
+.splash{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  overflow:hidden;
+  background:var(--c-red);
+  cursor:pointer;
+}
+.splash__bg{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center;
+  animation:splashBreath 8s ease-in-out infinite;
+}
+@keyframes splashBreath{
+  0%,100%{transform:scale(1.02)}
+  50%{transform:scale(1.06)}
+}
+.splash__scroll{
+  position:absolute;
+  right:24px;bottom:24px;
+  z-index:3;
+  writing-mode:vertical-rl;
+  font-family:"Bebas Neue",sans-serif;
+  letter-spacing:.4em;
+  font-size:12px;
+  color:rgba(255,255,255,.7);
+}
+.splash.is-leaving{
+  animation:splashLeave .9s var(--ease) forwards;
+}
+@keyframes splashLeave{
+  to{transform:translateY(-30px);opacity:0;visibility:hidden}
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px clamp(20px,4vw,48px);
+  background:var(--c-cream);
+  border-bottom:1px solid rgba(91,13,4,.12);
+  transition:background .35s var(--ease), box-shadow .35s var(--ease), padding .35s var(--ease);
+}
+.navbar.is-solid{
+  background:rgba(246,231,200,.96);
+  backdrop-filter:blur(10px);
+  box-shadow:0 10px 30px -16px rgba(91,13,4,.35);
+  padding-top:10px;padding-bottom:10px;
+}
+.navbar__brand{
+  display:flex;align-items:center;gap:10px;
+  color:var(--c-red-deep);
+}
+/* 3.png 是 RGB 無 alpha（白色背景）。用 mask 把圓形外的白底切除 */
+.logo-circle,
+.navbar__brand img,
+.story__visual img,
+.footer__brand img{
+  aspect-ratio:1/1;
+  object-fit:cover;
+  object-position:center;
+  -webkit-mask-image:radial-gradient(circle at 50% 50%, #000 43%, transparent 45%);
+          mask-image:radial-gradient(circle at 50% 50%, #000 43%, transparent 45%);
+}
+.navbar__brand img{width:54px;height:54px;filter:drop-shadow(0 3px 8px rgba(91,13,4,.25))}
+.navbar__brand-text{
+  font-family:"Bebas Neue",sans-serif;
+  font-size:20px;
+  line-height:.95;
+  letter-spacing:.08em;
+  color:var(--c-red-deep);
+  font-weight:700;
+}
+.navbar__menu{display:flex;align-items:center;gap:clamp(14px,2vw,32px)}
+.navbar__menu a{
+  position:relative;
+  color:var(--c-red-deep);
+  font-family:"Noto Serif TC",serif;
+  font-weight:700;
+  font-size:16px;
+  padding:8px 4px;
+  transition:color .2s;
+}
+.navbar__menu a::after{
+  content:"";
+  position:absolute;left:50%;right:50%;bottom:2px;
+  height:2px;background:var(--c-red);
+  transition:left .3s var(--ease),right .3s var(--ease);
+}
+.navbar__menu a:hover::after,
+.navbar__menu a.is-active::after{left:0;right:0}
+.navbar__menu a:hover{color:var(--c-red)}
+.navbar__toggle{
+  display:none;
+  flex-direction:column;gap:5px;
+  padding:8px;
+}
+.navbar__toggle span{
+  display:block;width:24px;height:2px;background:var(--c-red-deep);
+  transition:transform .3s, opacity .2s;
+}
+.navbar.is-open .navbar__toggle span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.navbar.is-open .navbar__toggle span:nth-child(2){opacity:0}
+.navbar.is-open .navbar__toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ============================================================
+   HERO 主搜尋區（大爆版 BOOM）
+   ============================================================ */
+.hero{
+  position:relative;
+  min-height:100vh;
+  padding:140px clamp(20px,5vw,60px) 100px;
+  background:
+    radial-gradient(ellipse 90% 70% at 72% 30%, rgba(255,205,110,.42), transparent 58%),
+    radial-gradient(ellipse 60% 65% at 12% 92%, rgba(91,13,4,.7), transparent 62%),
+    linear-gradient(155deg, #9a2412 0%, var(--c-red) 48%, #7a1008 100%);
+  color:var(--c-cream);
+  overflow:hidden;
+  isolation:isolate;
+}
+
+/* 主光源：金色太陽光暈 */
+.hero__sun{
+  position:absolute;
+  top:-15vh; right:-10vw;
+  width:90vh; height:90vh;
+  background:
+    radial-gradient(circle, rgba(255,210,120,.55) 0%, rgba(217,164,65,.25) 30%, transparent 65%);
+  filter:blur(20px);
+  z-index:0;
+  animation:sunBreath 9s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes sunBreath{
+  0%,100%{transform:scale(1);opacity:.9}
+  50%{transform:scale(1.08);opacity:1}
+}
+
+/* 紙質顆粒（薄薄一層髒度，質感關鍵） */
+.hero__grain{
+  position:absolute;inset:0;
+  z-index:1;
+  pointer-events:none;
+  opacity:.18;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+.hero__bgdecor{
+  position:absolute;inset:0;
+  pointer-events:none;
+  z-index:2;
+}
+.hero__ripple{
+  position:absolute;
+  filter:drop-shadow(0 8px 24px rgba(0,0,0,.35));
+  will-change:transform;
+  --px:0px; --py:0px;
+  transform:translate3d(var(--px),var(--py),0);
+}
+.hero__ripple--1{top:8%;right:-6%;width:48%;opacity:.45}
+.hero__ripple--2{bottom:-12%;left:-8%;width:42%;opacity:.4}
+.hero__ripple--3{top:35%;left:48%;width:22%;opacity:.3}
+
+/* 品牌圓形 LOGO 浮水印：藏在標題左後方，低透明度當質感層 */
+.hero__watermark{
+  position:absolute;
+  top:50%; left:2%;
+  width:min(46vh,440px);
+  z-index:2;
+  opacity:.08;
+  pointer-events:none;
+  --px:0px; --py:0px;
+  transform:translate(-10%,-50%) translate3d(var(--px),var(--py),0);
+  filter:drop-shadow(0 0 40px rgba(217,164,65,.4));
+  animation:wmSpin 60s linear infinite;
+}
+@keyframes wmSpin{
+  0%{filter:drop-shadow(0 0 40px rgba(217,164,65,.3))}
+  50%{filter:drop-shadow(0 0 60px rgba(217,164,65,.55))}
+  100%{filter:drop-shadow(0 0 40px rgba(217,164,65,.3))}
+}
+
+/* ============================================================
+   食物爆炸拼貼層 — 14 道精選散落 + 階梯爆出 + 異步浮動
+   ============================================================ */
+.hero__feast{
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  overflow:hidden;
+}
+/* 外層 div：接視差位移（JS 寫 --px/--py） */
+.hero__food{
+  position:absolute;
+  --px:0px; --py:0px;
+  transform:translate3d(var(--px),var(--py),0);
+  will-change:transform;
+  opacity:0;
+  animation:foodBoom .9s var(--ease) var(--delay,0ms) forwards;
+}
+/* 內層 img：接旋轉 + floating，跟外層 transform 互不干擾 */
+.hero__food img{
+  display:block;
+  width:100%;
+  height:auto;
+  filter:drop-shadow(0 14px 28px rgba(0,0,0,.45)) drop-shadow(0 0 18px rgba(217,164,65,.18));
+  transform:rotate(var(--rot,0deg));
+  animation:foodFloat var(--float-dur,7s) ease-in-out var(--float-delay,0s) infinite;
+  will-change:transform;
+}
+@keyframes foodBoom{
+  0%{
+    opacity:0;
+    transform:translate3d(var(--from-x,0),var(--from-y,0),0) scale(.3);
+  }
+  60%{opacity:1}
+  100%{
+    opacity:1;
+    transform:translate3d(var(--px),var(--py),0) scale(1);
+  }
+}
+@keyframes foodFloat{
+  0%,100%{transform:rotate(var(--rot,0deg)) translateY(0)}
+  50%{transform:rotate(calc(var(--rot,0deg) + 2deg)) translateY(-10px)}
+}
+
+/* 14 張食物個別定位（top/left/width + 個別旋轉與浮動參數） */
+.hero__food--1 {top: 6%;  right: 4%;  width:22%; --rot: -8deg; --from-x:120px;  --from-y:-80px;  --float-dur:6.5s; --float-delay:.1s}
+.hero__food--2 {top: 14%; right: 30%; width:16%; --rot:  6deg; --from-x:-60px;  --from-y:-100px; --float-dur:7.2s; --float-delay:.4s}
+.hero__food--3 {top: 38%; right: -2%; width:18%; --rot: 12deg; --from-x:140px;  --from-y:40px;   --float-dur:5.8s; --float-delay:.2s}
+.hero__food--4 {top: 60%; right: 12%; width:20%; --rot: -4deg; --from-x:80px;   --from-y:120px;  --float-dur:8s;   --float-delay:.6s}
+.hero__food--5 {top: 72%; right: 36%; width:14%; --rot: 14deg; --from-x:-40px;  --from-y:140px;  --float-dur:6.8s; --float-delay:.3s}
+.hero__food--6 {top: 30%; right: 50%; width:11%; --rot: -10deg;--from-x:-100px; --from-y:-60px;  --float-dur:7.5s; --float-delay:.8s}
+.hero__food--7 {top: 4%;  left: 50%;  width:10%; --rot:  8deg; --from-x:0;      --from-y:-120px; --float-dur:6s;   --float-delay:.5s}
+.hero__food--8 {top: 80%; left: 42%;  width: 9%; --rot:-14deg; --from-x:-30px;  --from-y:160px;  --float-dur:7.8s; --float-delay:.2s}
+.hero__food--9 {top: 22%; right: 18%; width:13%; --rot: 18deg; --from-x:60px;   --from-y:-80px;  --float-dur:6.3s; --float-delay:.7s}
+.hero__food--10{top: 56%; right: 28%; width:10%; --rot: -6deg; --from-x:40px;   --from-y:100px;  --float-dur:8.5s; --float-delay:.1s}
+.hero__food--11{top: 48%; right: 44%; width:12%; --rot: 10deg; --from-x:-80px;  --from-y:40px;   --float-dur:7s;   --float-delay:.9s}
+.hero__food--12{top: 86%; right: 6%;  width:13%; --rot: -16deg;--from-x:100px;  --from-y:180px;  --float-dur:6.6s; --float-delay:.4s}
+.hero__food--13{top: 88%; left: 4%;   width:14%; --rot: 12deg; --from-x:-180px; --from-y:120px;  --float-dur:7.4s; --float-delay:.5s}
+.hero__food--14{top: 64%; left: 28%;  width:11%; --rot:-12deg; --from-x:-140px; --from-y:60px;   --float-dur:6.9s; --float-delay:.3s}
+
+/* 角落紅色印章（避開 KV 中央 LOGO，貼右上邊緣） */
+.hero__stamp{
+  position:absolute;
+  top:104px;
+  right:clamp(16px,2.5vw,28px);
+  z-index:5;
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  background:linear-gradient(135deg, #c43426 0%, #7a1209 100%);
+  border:2px solid rgba(246,231,200,.4);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:var(--c-cream);
+  box-shadow:0 12px 32px rgba(0,0,0,.4), inset 0 0 0 4px rgba(91,13,4,.4);
+  transform:rotate(-12deg);
+  animation:stampSway 4s ease-in-out infinite;
+}
+@keyframes stampSway{
+  0%,100%{transform:rotate(-12deg)}
+  50%{transform:rotate(-8deg) scale(1.04)}
+}
+.hero__stamp-zh{
+  font-family:"Noto Serif TC",serif;
+  font-weight:900;
+  font-size:30px;
+  line-height:1;
+}
+.hero__stamp-en{
+  font-family:"Bebas Neue",sans-serif;
+  font-size:8px;
+  letter-spacing:.15em;
+  margin-top:4px;
+  opacity:.85;
+}
+
+.hero__inner{
+  position:relative;
+  z-index:6;
+  max-width:var(--maxw);
+  margin:0 auto;
+}
+.hero__eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  font-family:"Bebas Neue",sans-serif;
+  letter-spacing:.4em;
+  color:var(--c-gold);
+  font-size:14px;
+  margin-bottom:28px;
+  padding:6px 16px;
+  border:1px solid rgba(217,164,65,.35);
+  border-radius:999px;
+  background:rgba(91,13,4,.3);
+  backdrop-filter:blur(4px);
+  animation:heroFadeUp .9s var(--ease) .1s both;
+}
+.hero__eyebrow-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--c-gold);
+  box-shadow:0 0 12px var(--c-gold);
+  animation:dotPulse 1.4s ease-in-out infinite;
+}
+@keyframes dotPulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.5;transform:scale(.7)}
+}
+
+.hero__title{
+  font-size:clamp(64px,12vw,196px);
+  line-height:.92;
+  color:var(--c-cream);
+  letter-spacing:-.02em;
+  margin-left:-.04em;
+}
+.hero__title-line{
+  display:block;
+  position:relative;
+  text-shadow:
+    0 4px 0 rgba(91,13,4,.5),
+    0 8px 24px rgba(0,0,0,.5),
+    0 0 80px rgba(217,164,65,.15);
+  animation:heroFadeUp 1s var(--ease) both;
+}
+.hero__title-line:nth-child(1){animation-delay:.25s}
+.hero__title-line:nth-child(2){animation-delay:.45s}
+
+.hero__title-accent{
+  position:relative;
+  display:inline-block;
+  color:var(--c-gold);
+  font-style:italic;
+  padding:0 .04em;
+  background:linear-gradient(180deg, #fff2c4 0%, var(--c-gold) 55%, #a36e1f 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 8px 20px rgba(217,164,65,.45));
+}
+/* 三層重影：黑底 → 紅描邊 → 金主字（製造立體爆炸感） */
+.hero__title-accent::before,
+.hero__title-accent::after{
+  content:attr(data-text);
+  position:absolute;
+  left:0; top:0;
+  font-style:italic;
+  pointer-events:none;
+}
+.hero__title-accent::before{
+  z-index:-2;
+  transform:translate(10px, 12px);
+  color:transparent;
+  -webkit-text-stroke:2px rgba(91,13,4,.85);
+  -webkit-text-fill-color:transparent;
+  background:none;
+  filter:none;
+}
+.hero__title-accent::after{
+  z-index:-1;
+  transform:translate(5px, 6px);
+  color:rgba(91,13,4,.55);
+  -webkit-text-fill-color:rgba(91,13,4,.55);
+  background:none;
+  filter:none;
+}
+
+@keyframes heroFadeUp{
+  0%{opacity:0;transform:translateY(40px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+.hero__lede{
+  margin:32px 0 40px;
+  font-size:clamp(15px,1.6vw,19px);
+  max-width:560px;
+  color:rgba(246,231,200,.88);
+  border-left:3px solid var(--c-gold);
+  padding-left:16px;
+  animation:heroFadeUp 1s var(--ease) .65s both;
+}
+
+/* 搜尋表單 */
+.search{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:8px;
+  padding:8px;
+  background:var(--c-cream);
+  border-radius:999px;
+  max-width:780px;
+  box-shadow:
+    var(--shadow-card),
+    0 0 0 1px rgba(217,164,65,.25),
+    0 0 40px rgba(217,164,65,.2);
+  animation:heroFadeUp 1s var(--ease) .85s both;
+}
+.search__field{
+  display:flex;align-items:center;gap:10px;
+  padding:0 18px;
+  background:#fff;
+  border-radius:999px;
+}
+.search__field:focus-within{
+  outline:2px solid var(--c-gold);
+}
+.search__icon{font-size:18px}
+.search__field input{
+  flex:1;
+  border:0;outline:0;
+  padding:16px 0;
+  font-size:15px;
+  color:var(--c-ink);
+  background:transparent;
+  min-width:0;
+}
+.search__submit{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:0 28px;
+  background:var(--c-red);
+  color:#fff;
+  border-radius:999px;
+  font-family:"Bebas Neue",sans-serif;
+  letter-spacing:.2em;
+  font-size:16px;
+  transition:background .2s, transform .2s;
+}
+.search__submit:hover{background:var(--c-red-deep);transform:translateY(-1px)}
+.search__submit:active{transform:translateY(0)}
+
+/* 標籤 */
+.hero__tags{
+  margin-top:32px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:12px;
+  animation:heroFadeUp 1s var(--ease) 1.05s both;
+}
+.hero__tags-label{
+  font-family:"Bebas Neue",sans-serif;
+  letter-spacing:.3em;
+  color:var(--c-gold);
+  font-size:13px;
+}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tags button{
+  padding:8px 16px;
+  background:rgba(246,231,200,.12);
+  border:1px solid rgba(246,231,200,.3);
+  color:var(--c-cream);
+  border-radius:999px;
+  font-size:13px;
+  transition:all .25s var(--ease);
+}
+.tags button:hover{
+  background:var(--c-gold);
+  color:var(--c-red-deep);
+  border-color:var(--c-gold);
+  transform:translateY(-2px);
+}
+
+.search__output{
+  display:block;
+  margin-top:24px;
+  min-height:24px;
+  color:var(--c-gold);
+  font-size:14px;
+}
+
+/* ============================================================
+   搜尋結果（假資料店家）
+   ============================================================ */
+.results{
+  background:var(--c-cream);
+  padding:64px clamp(20px,5vw,60px) 24px;
+  border-top:3px solid var(--c-gold);
+}
+.results__inner{max-width:var(--maxw);margin:0 auto}
+.results__bar{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;margin-bottom:28px;
+}
+.results__head{
+  font-family:"Noto Serif TC",serif;
+  font-weight:900;
+  font-size:clamp(22px,3vw,32px);
+  color:var(--c-red);
+}
+.results__clear{
+  padding:8px 18px;
+  border:1px solid var(--c-red);
+  border-radius:999px;
+  color:var(--c-red);
+  font-size:13px;
+  background:transparent;
+  transition:all .2s var(--ease);
+}
+.results__clear:hover{background:var(--c-red);color:#fff}
+.results__grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:20px;
+}
+.results__empty{
+  margin:24px 0 8px;
+  color:var(--c-ink);
+  opacity:.7;
+  font-size:15px;
+}
+
+/* 店家結果卡 */
+.rcard{
+  background:#fff;
+  border-radius:18px;
+  padding:22px 22px 18px;
+  box-shadow:var(--shadow-card);
+  border:1px solid rgba(217,164,65,.25);
+  border-top:4px solid var(--c-gold);
+  display:flex;flex-direction:column;gap:10px;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease);
+}
+.rcard:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(91,13,4,.18)}
+.rcard--salty{border-top-color:#c43426}
+.rcard--sweet{border-top-color:#e0894d}
+.rcard--drink{border-top-color:#5b8c5a}
+.rcard__top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.rcard__name{
+  font-family:"Noto Serif TC",serif;
+  font-weight:700;font-size:20px;color:var(--c-ink);
+}
+.rcard__price{color:var(--c-gold);font-weight:700;letter-spacing:.05em}
+.rcard__loc{font-size:13px;color:var(--c-ink);opacity:.8;display:flex;align-items:center;gap:8px}
+.rcard__cat{
+  margin-left:auto;
+  background:rgba(217,164,65,.18);
+  color:var(--c-red);
+  padding:2px 10px;border-radius:999px;font-size:11px;font-weight:700;
+}
+.rcard__tags{display:flex;flex-wrap:wrap;gap:6px}
+.rcard__tag{
+  background:rgba(196,52,38,.08);
+  color:var(--c-red);
+  padding:3px 10px;border-radius:999px;font-size:12px;
+}
+.rcard__note{font-size:13px;line-height:1.6;color:var(--c-ink);opacity:.85;flex:1}
+.rcard__meta{
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px dashed rgba(91,13,4,.15);padding-top:10px;font-size:12px;
+}
+.rcard__rating{color:var(--c-gold);letter-spacing:1px}
+.rcard__rating b{color:var(--c-ink);margin-left:4px}
+.rcard__hours{color:var(--c-ink);opacity:.7}
+
+/* 菜卡是連結（點進詳情頁）：去底線、文字色繼承 */
+.dish{cursor:pointer;text-decoration:none;color:inherit}
+.dish:focus-visible{
+  outline:3px solid var(--c-gold);
+  outline-offset:4px;
+  border-radius:18px;
+}
+
+/* ============================================================
+   菜色詳情頁 dish.html
+   ============================================================ */
+.dish-page{background:var(--c-cream)}
+.dpage{
+  max-width:1240px;
+  margin:0 auto;
+  padding:100px clamp(18px,4vw,32px) 60px;
+}
+.dpage__back{
+  display:inline-flex;align-items:center;
+  margin-bottom:24px;padding:9px 18px;
+  border:1px solid var(--c-red);border-radius:999px;
+  color:var(--c-red);font-size:14px;text-decoration:none;
+  transition:all .2s var(--ease);
+}
+.dpage__back:hover{background:var(--c-red);color:#fff;transform:translateX(-3px)}
+
+/* 進場：各區塊由上往下逐段浮現 */
+.ddetail > *{
+  opacity:0;transform:translateY(26px);
+  transition:opacity .55s var(--ease), transform .55s var(--ease);
+  transition-delay:calc(var(--i,0) * 90ms + 80ms);
+}
+.ddetail.is-in > *{opacity:1;transform:none}
+
+/* 主視覺 + 基本資料（雙欄） */
+.dhero{
+  display:grid;
+  grid-template-columns:minmax(0,680px) 1fr;
+  gap:44px;align-items:center;
+  background:#fff;border-radius:28px;padding:32px;
+  box-shadow:var(--shadow-card);
+  border:1px solid rgba(217,164,65,.25);
+  border-top:6px solid var(--c-red);
+}
+.dhero--sweet{border-top-color:#e0894d}
+.dhero--drink{border-top-color:#5b8c5a}
+.dhero__media{
+  aspect-ratio:1/1;border-radius:24px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.7), transparent 55%),
+    radial-gradient(circle at center, var(--c-cream) 60%, var(--c-cream-deep) 100%);
+  box-shadow:inset 0 -10px 26px rgba(91,13,4,.16);
+}
+.dhero--drink .dhero__media{
+  background:radial-gradient(circle at center, #f6e7c8 60%, #c48b48 100%);
+}
+.dhero__media img{width:98%;height:98%;object-fit:contain;filter:drop-shadow(0 18px 30px rgba(91,13,4,.3))}
+.dhero__media--emoji span{font-size:clamp(150px,26vw,240px);line-height:1;filter:drop-shadow(0 10px 18px rgba(91,13,4,.3))}
+
+/* 食材飛入聚攏 → 成品浮現（滷肉飯特別動畫） */
+.dhero__media--assemble{
+  position:relative;overflow:hidden;
+  width:100%;
+  aspect-ratio:677/369;        /* 配合素材比例，且子元素皆 absolute 時仍有高度 */
+  background:radial-gradient(circle at 50% 42%, #fff, var(--c-cream) 72%);
+}
+.assemble{position:absolute;inset:0}
+.assemble__result,
+.assemble__piece{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:contain;
+  will-change:transform,opacity;
+}
+.assemble__result{opacity:0;transform:scale(.92);filter:drop-shadow(0 16px 26px rgba(91,13,4,.28))}
+.assemble__piece{opacity:0;filter:drop-shadow(0 10px 18px rgba(91,13,4,.22))}
+
+.assemble.is-playing .assemble__result{animation:asmResult 1.1s var(--ease) 1.15s forwards}
+.assemble.is-playing .assemble__piece{animation:asmGather 1.5s var(--ease) var(--d,0ms) both}
+
+@keyframes asmGather{
+  0%{opacity:0;transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(.6)}
+  22%{opacity:1}
+  62%{opacity:1;transform:translate(0,0) rotate(0deg) scale(.9)}
+  100%{opacity:0;transform:translate(0,0) rotate(0deg) scale(1)}
+}
+@keyframes asmResult{
+  0%{opacity:0;transform:scale(.92)}
+  60%{opacity:1}
+  100%{opacity:1;transform:scale(1)}
+}
+
+.assemble__replay{
+  position:absolute;left:50%;bottom:12px;transform:translateX(-50%);
+  z-index:5;padding:8px 18px;border-radius:999px;
+  background:var(--c-red);color:#fff;font-size:13px;letter-spacing:.05em;
+  box-shadow:0 6px 16px rgba(91,13,4,.3);
+  transition:background .2s var(--ease), transform .2s var(--ease);
+}
+.assemble__replay:hover{background:var(--c-red-deep);transform:translateX(-50%) translateY(-2px)}
+
+@media (prefers-reduced-motion: reduce){
+  .assemble.is-playing .assemble__result{animation:none;opacity:1;transform:none}
+  .assemble.is-playing .assemble__piece{animation:none;opacity:0}
+}
+
+.dhero__num{font-family:"Bebas Neue",sans-serif;letter-spacing:.2em;color:var(--c-gold);font-size:16px}
+.dhero__name{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(34px,6vw,56px);color:var(--c-red);line-height:1.05;margin-top:2px}
+.dhero__en{font-family:"Bebas Neue",sans-serif;letter-spacing:.16em;color:var(--c-gold);font-size:18px;margin-top:6px}
+.dhero__meta{display:flex;align-items:center;gap:12px;margin:18px 0}
+.dcat{padding:5px 16px;border-radius:999px;font-size:13px;font-weight:700;color:#fff;background:var(--c-red)}
+.dcat--sweet{background:#e0894d}
+.dcat--drink{background:#5b8c5a}
+.dprice{font-family:"Bebas Neue",sans-serif;font-size:24px;color:var(--c-ink);letter-spacing:.05em}
+.dhero__desc{font-size:16px;line-height:1.9;color:var(--c-ink)}
+.dhero__tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.dchip{background:rgba(196,52,38,.08);color:var(--c-red);padding:4px 12px;border-radius:999px;font-size:12px}
+
+/* 區塊 */
+.dsec{margin-top:48px}
+.dsec__h{
+  font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(22px,3vw,28px);
+  color:var(--c-ink);display:inline-block;
+  padding-bottom:10px;border-bottom:3px solid var(--c-gold);margin-bottom:24px;
+}
+.dsec__empty{color:var(--c-ink);opacity:.7;font-size:15px}
+
+/* 食材拆解 */
+.ding__grid{display:flex;flex-wrap:wrap;gap:22px}
+.ding{width:188px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.ding__disc{
+  width:172px;height:172px;border-radius:50%;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 18px rgba(91,13,4,.14);
+  transition:transform .25s var(--ease);
+}
+.ding__disc img{width:82%;height:82%;object-fit:contain}
+.ding:hover .ding__disc{transform:scale(1.08) rotate(-5deg)}
+.ding__label{font-size:13px;color:var(--c-ink);opacity:.85}
+
+/* 哪裡吃得到（重用 .rcard） */
+.dstores__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+
+/* 你可能也想吃 */
+.drel__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+.drel{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:18px 14px;background:#fff;border-radius:18px;text-decoration:none;
+  color:var(--c-ink);border:1px solid rgba(217,164,65,.2);
+  transition:transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s;
+}
+.drel:hover{transform:translateY(-5px);box-shadow:var(--shadow-card);border-color:var(--c-gold)}
+.drel__media{
+  width:172px;height:172px;border-radius:50%;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at center, var(--c-cream) 60%, var(--c-cream-deep) 100%);
+}
+.drel__media img{width:84%;height:84%;object-fit:contain}
+.drel__emoji{font-size:74px;line-height:1}
+.drel__name{font-weight:700;font-size:15px}
+.drel__price{font-family:"Bebas Neue",sans-serif;color:var(--c-gold);font-size:14px;letter-spacing:.08em}
+
+/* 找不到 */
+.ddetail__notfound{text-align:center;padding:60px 20px}
+.ddetail__notfound-emoji{font-size:80px}
+.ddetail__notfound h1{font-family:"Noto Serif TC",serif;color:var(--c-red);font-size:32px;margin:14px 0 8px}
+.ddetail__notfound p{color:var(--c-ink);opacity:.8;margin-bottom:20px}
+.ddetail__cta{
+  display:inline-block;padding:12px 26px;border-radius:999px;
+  background:var(--c-red);color:#fff;text-decoration:none;
+  transition:background .2s;
+}
+.ddetail__cta:hover{background:var(--c-red-deep)}
+
+@media (max-width:760px){
+  .dhero{grid-template-columns:1fr;gap:22px;padding:22px}
+  .dhero__media{max-width:340px;margin:0 auto}
+  /* 食材圓圖：手機縮小成一排約 3 顆，避免一排一顆過於空曠 */
+  .ding{width:100px;gap:8px}
+  .ding__disc{width:92px;height:92px}
+  .ding__grid{gap:14px;justify-content:center}
+  /* 相關推薦：手機固定 2 欄 */
+  .drel__grid{grid-template-columns:repeat(2,1fr)}
+  .drel__media{width:120px;height:120px}
+}
+@media (prefers-reduced-motion: reduce){
+  .ddetail > *{transition:opacity .2s ease;transform:none}
+}
+
+/* ============================================================
+   三大支柱
+   ============================================================ */
+.pillars{
+  background:var(--c-cream);
+  padding:80px clamp(20px,5vw,60px);
+  position:relative;
+}
+.pillars::before{
+  content:"";
+  position:absolute;top:-1px;left:0;right:0;height:60px;
+  background:linear-gradient(180deg, var(--c-red) 0%, transparent 100%);
+  opacity:.3;
+}
+.pillars__grid{
+  max-width:var(--maxw);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.pillar{
+  position:relative;
+  padding:40px 32px;
+  border-radius:var(--radius-lg);
+  background:#fff;
+  color:var(--c-red-deep);
+  overflow:hidden;
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  border:1px solid rgba(155,31,18,.08);
+}
+.pillar:hover{
+  transform:translateY(-8px);
+  box-shadow:var(--shadow-card);
+}
+.pillar::after{
+  content:"";
+  position:absolute;left:32px;right:32px;bottom:24px;
+  height:3px;background:var(--c-gold);
+  transform:scaleX(.2);transform-origin:left;
+  transition:transform .4s var(--ease);
+}
+.pillar:hover::after{transform:scaleX(1)}
+.pillar__num{
+  font-family:"Bebas Neue",sans-serif;
+  font-size:48px;
+  color:var(--c-red);
+  opacity:.25;
+  line-height:1;
+}
+.pillar h2{
+  font-size:42px;
+  margin:8px 0 4px;
+  color:var(--c-red);
+}
+.pillar p{
+  font-family:"Bebas Neue",sans-serif;
+  letter-spacing:.3em;
+  color:var(--c-gold);
+  font-size:14px;
+  margin-bottom:16px;
+}
+.pillar small{font-size:14px;line-height:1.7;color:var(--c-ink)}
+
+/* ============================================================
+   分類菜單區 .cat
+   ============================================================ */
+.cat{
+  padding:100px clamp(20px,5vw,60px);
+  position:relative;
+}
+.cat--salty{background:var(--c-red);color:var(--c-cream)}
+.cat--sweet{background:var(--c-cream);color:var(--c-red-deep)}
+.cat--drink{background:var(--c-red-deep);color:var(--c-cream)}
+
+.cat__head{
+  max-width:var(--maxw);
+  margin:0 auto 60px;
+  text-align:center;
+}
+.cat__eyebrow{
+  font-family:"Bebas Neue",sans-serif;
+  letter-spacing:.5em;
+  font-size:13px;
+  color:var(--c-gold);
+  margin-bottom:14px;
+}
+.cat__title{
+  font-size:clamp(48px,7vw,96px);
+  letter-spacing:.05em;
+  margin-bottom:20px;
+}
+.cat__lede{
+  max-width:600px;
+  margin:0 auto;
+  opacity:.85;
+  font-size:16px;
+}
+
+/* ============================================================
+   甜點圓桌轉盤（釘住聚焦 + 滾動驅動旋轉）
+   ============================================================ */
+.tt-track{position:relative;height:300vh}
+.tt-track.is-static{height:auto}          /* 減動 fallback：回到一般格線 */
+.tt-sticky{
+  --nav-h:88px;                          /* 固定導覽列高度，置中時扣掉避免頂端被切 */
+  position:sticky;top:0;
+  height:100vh;
+  display:grid;place-items:center;
+  padding-top:var(--nav-h);              /* 在 header 以下的可視區置中 */
+  box-sizing:border-box;
+  overflow:hidden;
+}
+.tt-track.is-static .tt-sticky{position:static;height:auto;display:block;padding-top:0}
+
+.turntable{
+  --spin:0deg;
+  --D:min(88vw,660px,66vh);              /* 同時受視窗高限制，矮螢幕也不會頂到 header */
+  --R:calc(var(--D) * 0.40);            /* 盤子離圓心半徑 */
+  position:relative;
+  width:var(--D);height:var(--D);
+}
+
+/* 圓心 hub：標題 + 當前聚焦甜點名 */
+.tt-hub{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:38%;
+  text-align:center;color:var(--c-red);
+  z-index:1;pointer-events:none;
+}
+.tt-hub__label{
+  display:block;font-family:"Noto Serif TC",serif;font-weight:900;
+  font-size:clamp(26px,4vw,40px);line-height:1;
+}
+.tt-hub__name{
+  display:block;margin-top:10px;
+  font-size:clamp(14px,1.6vw,18px);font-weight:700;color:var(--c-red-deep);
+  min-height:1.4em;
+}
+.tt-hub__hint{
+  display:block;margin-top:8px;
+  font-family:"Bebas Neue",sans-serif;letter-spacing:.2em;font-size:12px;color:var(--c-gold);
+}
+
+/* 盤子：三層 transform — 定位上盤 / 反轉正立 / 聚焦放大 */
+.tt-plate{
+  position:absolute;top:50%;left:50%;
+  width:clamp(116px,16vw,168px);
+  text-decoration:none;color:var(--c-red-deep);
+  transform:translate(-50%,-50%) rotate(calc(var(--a) + var(--spin))) translateY(calc(-1 * var(--R)));
+}
+.tt-plate__inner{
+  display:block;
+  transform:rotate(calc(-1 * (var(--a) + var(--spin))));
+}
+.tt-plate__card{
+  --s:0.82;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  transform:scale(var(--s));
+  opacity:.72;
+  transition:transform .3s var(--ease), opacity .3s var(--ease);
+}
+.tt-plate.is-front{z-index:3}
+.tt-plate.is-front .tt-plate__card{--s:1.28;opacity:1}
+
+.tt-plate__disc{
+  width:100%;aspect-ratio:1;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.7), transparent 55%),
+    radial-gradient(circle at center, var(--c-cream) 60%, var(--c-cream-deep) 100%);
+  box-shadow:inset 0 -8px 20px rgba(91,13,4,.16), 0 10px 24px -8px rgba(91,13,4,.35);
+  transition:box-shadow .3s var(--ease);
+}
+.tt-plate.is-front .tt-plate__disc{
+  box-shadow:inset 0 -8px 20px rgba(91,13,4,.16),
+             0 16px 36px -8px rgba(91,13,4,.4),
+             0 0 0 4px rgba(217,164,65,.55),
+             0 0 30px rgba(217,164,65,.5);
+}
+.tt-plate__disc img{width:84%;height:84%;object-fit:contain;filter:drop-shadow(0 8px 12px rgba(91,13,4,.25))}
+.tt-plate__disc--emoji span{font-size:clamp(48px,7vw,72px);line-height:1}
+.tt-plate__name{font-family:"Noto Serif TC",serif;font-weight:700;font-size:15px;color:var(--c-red)}
+.tt-plate__price{font-family:"Bebas Neue",sans-serif;letter-spacing:.06em;font-size:13px;color:var(--c-gold)}
+
+@media (max-width:760px){
+  .tt-track{height:260vh}
+  .turntable{--D:min(94vw,460px);--R:calc(var(--D) * 0.42)}
+  .tt-plate{width:clamp(96px,28vw,132px)}
+  .tt-plate.is-front .tt-plate__card{--s:1.18}
+}
+
+/* ============================================================
+   飲品橫向展開手風琴
+   ============================================================ */
+.panels{
+  max-width:var(--maxw);
+  margin:0 auto;
+  display:flex;
+  gap:12px;
+  height:clamp(420px,62vh,600px);
+}
+.panel{
+  position:relative;
+  flex:1;min-width:0;
+  border-radius:20px;
+  overflow:hidden;
+  cursor:pointer;
+  opacity:0;                                   /* 進場前 */
+  background:linear-gradient(160deg,
+    hsl(calc(10 + var(--i) * 6) 68% 33%),
+    hsl(calc(4 + var(--i) * 5) 76% 15%));
+  border:1px solid rgba(217,164,65,.25);
+  box-shadow:0 14px 32px -12px rgba(0,0,0,.6);
+  transition:flex .55s var(--ease);
+}
+.panels.is-in .panel{animation:panelRise .6s var(--ease) calc(var(--i) * 80ms) both}
+@keyframes panelRise{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:none}}
+.panel.is-active{flex:4.6}
+
+/* 裝飾素材底紋（漣漪／祥雲），展開時更明顯 */
+.panel__decor{position:absolute;inset:0;z-index:0;display:flex;align-items:center;justify-content:center;opacity:.16;pointer-events:none;transition:opacity .5s var(--ease)}
+.panel__decor img{width:130%;height:130%;object-fit:cover;filter:saturate(.7) brightness(1.1)}
+.panel.is-active .panel__decor{opacity:.3}
+
+/* emoji 主視覺 */
+.panel__emoji{
+  position:absolute;inset:0;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(42px,6vw,78px);
+  filter:drop-shadow(0 10px 16px rgba(0,0,0,.45));
+  transition:transform .5s var(--ease);
+}
+.panel.is-active .panel__emoji{transform:translateY(-24%) scale(1.18)}
+
+/* 合成照片主視覺（珍奶／青茶／木瓜牛奶） */
+.panel__photo{
+  position:absolute;inset:0;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;
+  transition:transform .5s var(--ease);
+}
+.panel__photo img{
+  max-height:60%;max-width:92%;object-fit:contain;
+  filter:drop-shadow(0 16px 26px rgba(0,0,0,.5));
+  transition:transform .5s var(--ease);
+}
+.panel.is-active .panel__photo img{transform:translateY(-18%) scale(1.08)}
+
+/* 收合時的直書標籤 */
+.panel__label{
+  position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+  z-index:2;writing-mode:vertical-rl;letter-spacing:.12em;white-space:nowrap;
+  font-family:"Noto Serif TC",serif;font-weight:700;font-size:clamp(15px,1.4vw,19px);
+  color:var(--c-cream);text-shadow:0 2px 8px rgba(0,0,0,.55);
+  transition:opacity .3s var(--ease);
+}
+.panel.is-active .panel__label{opacity:0}
+
+/* 展開內容 */
+.panel__body{
+  position:absolute;left:0;right:0;bottom:0;z-index:3;
+  padding:28px clamp(20px,3vw,38px);
+  color:var(--c-cream);
+  opacity:0;transform:translateY(20px);pointer-events:none;
+  transition:opacity .4s .15s var(--ease), transform .4s .15s var(--ease);
+}
+.panel.is-active .panel__body{opacity:1;transform:none;pointer-events:auto}
+.panel__name{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(24px,3vw,34px);white-space:nowrap}
+.panel__en{font-family:"Bebas Neue",sans-serif;letter-spacing:.14em;color:var(--c-gold);font-size:15px;margin-top:2px}
+.panel__desc{font-size:14px;line-height:1.7;margin:10px 0 12px;max-width:40ch;opacity:.92}
+.panel__price{font-family:"Bebas Neue",sans-serif;font-size:19px;color:var(--c-gold);letter-spacing:.06em}
+.panel__cta{
+  display:inline-block;margin-left:14px;
+  padding:9px 22px;border-radius:999px;
+  background:var(--c-gold);color:var(--c-red-deep);
+  font-weight:700;text-decoration:none;font-size:14px;
+  transition:transform .2s var(--ease), background .2s;
+}
+.panel__cta:hover{transform:translateX(3px);background:#e8b855}
+
+/* 手機：改直式手風琴 */
+@media (max-width:760px){
+  .panels{flex-direction:column;height:auto;gap:10px}
+  .panel{flex:none;height:80px;transition:height .45s var(--ease)}
+  .panel.is-active{flex:none;height:300px}   /* 覆寫桌機 flex:4.6，否則 flex-basis:0 會把高度壓塌 */
+  .panel__emoji{justify-content:flex-start;padding-left:26px;font-size:46px}
+  .panel.is-active .panel__emoji{transform:translateY(-30%) scale(1.1)}
+  .panel__photo{justify-content:flex-start;padding-left:16px}
+  .panel__photo img{max-height:74%;max-width:38%}
+  .panel.is-active .panel__photo img{transform:translateY(-24%) scale(1.04)}
+  .panel__label{writing-mode:horizontal-tb;left:auto;right:26px;bottom:auto;top:50%;transform:translateY(-50%)}
+  .panel__name{white-space:normal}
+  .panel__body{padding:18px 24px}
+  .panel__desc{max-width:none}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .panel{transition:none}
+  .panels.is-in .panel{animation:none;opacity:1}
+  .panel__emoji,.panel__label,.panel__body,.panel__decor{transition:none}
+}
+
+/* ============================================================
+   每日一食「今天吃啥?」（擲骰 + 月曆）
+   ============================================================ */
+.daily{
+  background:var(--c-cream);
+  color:var(--c-red-deep);
+  padding:100px clamp(20px,5vw,60px);
+}
+.daily__wrap{
+  max-width:var(--maxw);margin:0 auto;
+  display:grid;grid-template-columns:0.9fr 1.1fr;gap:36px;align-items:start;
+}
+
+/* 擲骰卡 */
+.daily__roller{
+  background:#fff;border-radius:24px;padding:30px;
+  box-shadow:var(--shadow-card);border:1px solid rgba(217,164,65,.25);
+  text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;
+}
+.roller__date{font-family:"Bebas Neue",sans-serif;letter-spacing:.12em;color:var(--c-gold);font-size:16px}
+.roller__stage{
+  width:100%;min-height:300px;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 42%, #fff, var(--c-cream) 78%);
+  border-radius:18px;padding:20px;overflow:hidden;
+}
+/* CSS 紅骰子（五點，待機晃動） */
+.dice{
+  width:120px;height:120px;border-radius:26px;padding:18px;
+  display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+  background:linear-gradient(150deg,#c4342a,#9b1f12);
+  box-shadow:inset 0 -8px 0 rgba(0,0,0,.18), 0 18px 32px -8px rgba(155,31,18,.6);
+  animation:diceIdle 2.4s ease-in-out infinite;
+}
+.dice i{width:18px;height:18px;border-radius:50%;background:#fff;align-self:center;justify-self:center;box-shadow:inset 0 -2px 3px rgba(0,0,0,.2)}
+.dice i:nth-child(1){grid-area:1/1}
+.dice i:nth-child(2){grid-area:1/3}
+.dice i:nth-child(3){grid-area:2/2}
+.dice i:nth-child(4){grid-area:3/1}
+.dice i:nth-child(5){grid-area:3/3}
+@keyframes diceIdle{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg) translateY(-7px)}}
+
+/* 結果 */
+.roller__result{display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:var(--c-ink);animation:resultPop .4s var(--ease)}
+@keyframes resultPop{0%{opacity:0;transform:scale(.7)}100%{opacity:1;transform:scale(1)}}
+.roller__media{
+  width:200px;height:200px;border-radius:50%;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 30% 25%, rgba(255,255,255,.7), transparent 55%),
+             radial-gradient(circle at center, var(--c-cream) 60%, var(--c-cream-deep) 100%);
+  box-shadow:inset 0 -8px 20px rgba(91,13,4,.15);
+}
+.roller__media--spin{width:170px;height:170px;animation:resultPop .15s var(--ease)}
+.roller__img{width:86%;height:86%;object-fit:contain;filter:drop-shadow(0 10px 16px rgba(91,13,4,.3))}
+.roller__emoji{font-size:clamp(80px,14vw,104px);line-height:1}
+.roller__name{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(26px,3vw,32px);color:var(--c-red)}
+.roller__sub{font-family:"Bebas Neue",sans-serif;letter-spacing:.06em;color:var(--c-gold);font-size:16px}
+.roller__cta{margin-top:6px;padding:8px 20px;border-radius:999px;background:var(--c-gold);color:var(--c-red-deep);font-weight:700;font-size:14px}
+
+.roller__btn{
+  padding:14px 34px;border-radius:999px;
+  background:var(--c-red);color:#fff;font-size:17px;font-weight:700;
+  box-shadow:0 10px 24px -8px rgba(155,31,18,.7);
+  transition:transform .2s var(--ease), background .2s;
+}
+.roller__btn:hover{background:var(--c-red-deep);transform:translateY(-2px)}
+.roller__btn:disabled{opacity:.6;cursor:default;transform:none}
+.roller__hint{font-size:13px;color:var(--c-ink);opacity:.6}
+
+/* 月曆 */
+.daily__cal{background:#fff;border-radius:24px;padding:24px;box-shadow:var(--shadow-card);border:1px solid rgba(217,164,65,.25)}
+.cal__title{font-family:"Noto Serif TC",serif;font-weight:900;font-size:24px;color:var(--c-red);text-align:center;margin-bottom:16px}
+.cal__weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px}
+.cal__weekdays span{text-align:center;font-size:12px;color:var(--c-ink);opacity:.6}
+.cal__grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal__cell{
+  position:relative;aspect-ratio:1;border-radius:12px;padding:4px;
+  background:var(--c-cream);border:1px solid rgba(217,164,65,.18);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  cursor:pointer;overflow:hidden;transition:transform .15s var(--ease), box-shadow .15s;
+}
+.cal__cell--empty{background:transparent;border:0;cursor:default}
+.cal__cell--future{opacity:.4;cursor:default}
+.cal__cell:not(.cal__cell--empty):not(.cal__cell--future):hover{transform:translateY(-2px);box-shadow:0 6px 14px -4px rgba(91,13,4,.3)}
+.cal__day{position:absolute;top:3px;left:6px;font-size:11px;color:var(--c-ink);opacity:.7;z-index:1}
+.cal__thumb{width:74%;height:74%;display:flex;align-items:center;justify-content:center}
+.cal__thumb img{width:100%;height:100%;object-fit:contain}
+.cal__emoji{font-size:clamp(16px,2.4vw,26px);line-height:1}
+.cal__q{font-family:"Bebas Neue",sans-serif;font-weight:700;font-size:clamp(20px,3vw,30px);color:var(--c-gold)}
+.cal__cell.is-today{border:2px solid var(--c-gold);box-shadow:0 0 0 3px rgba(217,164,65,.28)}
+.cal__caption{text-align:center;margin-top:14px;color:var(--c-red);font-weight:700;min-height:1.4em}
+
+@media (max-width:860px){
+  .daily__wrap{grid-template-columns:1fr;gap:24px}
+  .roller__stage{min-height:240px}
+  .roller__media{width:160px;height:160px}
+}
+@media (prefers-reduced-motion: reduce){
+  .dice{animation:none}
+  .roller__result,.roller__media--spin{animation:none}
+}
+
+/* 今天吃啥 結果卡：連結 + 蓋章按鈕 */
+.roller__link{display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:var(--c-ink)}
+.roller__actions{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.roller__stampbtn{padding:8px 18px;border-radius:999px;border:1px solid var(--c-red);background:#fff;color:var(--c-red);font-weight:700;font-size:14px;transition:background .2s, color .2s, transform .15s}
+.roller__stampbtn:hover{transform:translateY(-1px)}
+.roller__stampbtn.is-eaten{background:var(--c-gold);color:var(--c-red-deep);border-color:var(--c-gold)}
+
+/* ============================================================
+   美食護照集點
+   ============================================================ */
+.passport{background:var(--c-paper);color:var(--c-red-deep);padding:100px clamp(20px,5vw,60px)}
+.passport__head{position:relative;max-width:var(--maxw);margin:0 auto}
+/* 長標題：覆寫 .cat__title 的 7vw（那是給「鹹·點」短標題用的），避免爆版／撞徽章 */
+.passport .cat__title{font-size:clamp(24px,3.4vw,42px);line-height:1.2}
+.pscore{
+  position:absolute;top:-8px;right:0;z-index:2;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:96px;height:96px;border-radius:50%;
+  background:linear-gradient(150deg,#c4342a,#9b1f12);color:#fff;
+  border:3px solid var(--c-gold);box-shadow:0 12px 26px -8px rgba(155,31,18,.6);
+}
+.pscore__num{font-family:"Bebas Neue",sans-serif;font-size:38px;line-height:1}
+.pscore__label{font-size:13px;letter-spacing:.1em}
+
+.passport__bar{max-width:560px;margin:24px auto 28px;text-align:center}
+.pbar{height:12px;border-radius:999px;background:rgba(155,31,18,.12);overflow:hidden}
+.pbar__fill{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--c-gold),#c4342a);transition:width .5s var(--ease)}
+.pbar__text{margin-top:8px;font-weight:700;color:var(--c-red)}
+
+.pfilters{max-width:var(--maxw);margin:0 auto 24px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.pfilter{padding:8px 18px;border-radius:999px;border:1px solid rgba(155,31,18,.3);background:#fff;color:var(--c-red);font-size:14px;transition:background .2s, color .2s}
+.pfilter.is-active{background:var(--c-red);color:#fff;border-color:var(--c-red)}
+
+.pgrid{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:14px}
+.pcard{
+  position:relative;aspect-ratio:1;border-radius:18px;padding:14px 8px;
+  background:#fff;border:1px solid rgba(217,164,65,.25);
+  box-shadow:0 8px 18px -8px rgba(91,13,4,.25);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  cursor:pointer;overflow:hidden;
+  filter:grayscale(.85) opacity(.62);
+  transition:transform .2s var(--ease), box-shadow .2s, filter .3s;
+}
+.pcard:hover{transform:translateY(-4px)}
+.pcard.is-eaten{filter:none;border-color:var(--c-gold);box-shadow:0 10px 24px -8px rgba(155,31,18,.4), 0 0 0 2px rgba(217,164,65,.45)}
+.pcard__media{width:74%;height:62%;display:flex;align-items:center;justify-content:center}
+.pcard__media img{width:100%;height:100%;object-fit:contain}
+.pcard__emoji{font-size:clamp(34px,5vw,50px);line-height:1}
+.pcard__name{font-family:"Noto Serif TC",serif;font-weight:700;font-size:14px;color:var(--c-ink);text-align:center}
+.pcard__stamp{
+  position:absolute;top:8px;right:8px;
+  background:var(--c-red);color:#fff;font-size:11px;font-weight:700;
+  padding:3px 9px;border-radius:6px;border:1.5px dashed rgba(255,255,255,.65);
+  transform:rotate(-12deg) scale(0);opacity:0;
+  transition:transform .25s var(--ease), opacity .2s;
+}
+.pcard.is-eaten .pcard__stamp{transform:rotate(-12deg) scale(1);opacity:1;animation:stampPop .35s var(--ease)}
+@keyframes stampPop{0%{transform:rotate(-12deg) scale(1.7)}60%{transform:rotate(-12deg) scale(.9)}100%{transform:rotate(-12deg) scale(1)}}
+.pcard__hint{position:absolute;bottom:8px;font-size:11px;color:var(--c-gold);opacity:0;transition:opacity .2s}
+.pcard:not(.is-eaten):hover .pcard__hint{opacity:1}
+
+/* 詳情頁「我吃過了」按鈕 */
+.dhero__eat{
+  display:inline-block;margin-top:18px;
+  padding:12px 26px;border-radius:999px;
+  background:var(--c-red);color:#fff;font-weight:700;font-size:15px;
+  box-shadow:0 8px 20px -8px rgba(155,31,18,.6);
+  transition:background .2s, transform .2s var(--ease);
+}
+.dhero__eat:hover{background:var(--c-red-deep);transform:translateY(-2px)}
+.dhero__eat.is-eaten{background:var(--c-gold);color:var(--c-red-deep)}
+
+@media (max-width:760px){
+  .passport__head{display:flex;flex-direction:column;align-items:center}
+  .pscore{position:static;margin:16px auto 0;width:80px;height:80px}
+  .pscore__num{font-size:32px}
+  .pgrid{grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:10px}
+  .pcard__name{font-size:12px}
+}
+@media (prefers-reduced-motion: reduce){
+  .pcard.is-eaten .pcard__stamp{animation:none}
+  .pbar__fill{transition:none}
+}
+
+.dish-grid{
+  max-width:var(--maxw);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+.dish{
+  position:relative;
+  padding:20px 24px 24px;
+  border-radius:var(--radius-md);
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(246,231,200,.18);
+  transition:all .35s var(--ease);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.cat--sweet .dish{
+  background:#fff;
+  border-color:rgba(155,31,18,.12);
+  color:var(--c-ink);
+}
+.dish:hover{
+  transform:translateY(-6px);
+  background:rgba(246,231,200,.1);
+  border-color:var(--c-gold);
+}
+.cat--sweet .dish:hover{
+  background:var(--c-paper);
+  box-shadow:var(--shadow-card);
+}
+/* 圖片區：米色圓盤背景 + 主圖置中 */
+.dish__photo{
+  position:relative;
+  aspect-ratio:1/1;
+  margin:-4px -8px 14px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.6), transparent 55%),
+    radial-gradient(circle at center, var(--c-cream) 60%, var(--c-cream-deep) 100%);
+  box-shadow:inset 0 -8px 20px rgba(91,13,4,.18), 0 8px 22px -10px rgba(91,13,4,.3);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.cat--drink .dish__photo{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.5), transparent 55%),
+    radial-gradient(circle at center, #f6e7c8 60%, #c48b48 100%);
+}
+.dish__photo img{
+  width:88%;
+  height:88%;
+  object-fit:contain;
+  transition:transform .5s var(--ease);
+  filter:drop-shadow(0 8px 12px rgba(91,13,4,.25));
+}
+.dish:hover .dish__photo img{transform:scale(1.08) rotate(-2deg)}
+.dish__photo--emoji{font-size:140px}
+.dish__photo--emoji span{display:block;line-height:1;filter:drop-shadow(0 6px 10px rgba(91,13,4,.3));transition:transform .5s var(--ease)}
+.dish:hover .dish__photo--emoji span{transform:scale(1.15) rotate(-6deg)}
+.dish__num{
+  position:absolute;
+  top:18px;right:20px;
+  z-index:2;
+  font-family:"Bebas Neue",sans-serif;
+  font-size:28px;
+  letter-spacing:.05em;
+  color:var(--c-gold);
+  opacity:.85;
+  text-shadow:0 2px 6px rgba(0,0,0,.3);
+  transition:all .4s var(--ease);
+}
+.dish:hover .dish__num{
+  opacity:1;
+  transform:scale(1.15) rotate(-6deg);
+}
+.dish h3{
+  font-size:24px;
+  margin-bottom:2px;
+  color:inherit;
+}
+.cat--sweet .dish h3{color:var(--c-red)}
+.dish__sub{
+  font-family:"Bebas Neue",sans-serif;
+  letter-spacing:.18em;
+  font-size:12px;
+  color:var(--c-gold);
+  margin-bottom:10px;
+}
+.dish__desc{
+  font-size:13.5px;
+  line-height:1.7;
+  opacity:.85;
+  margin-bottom:14px;
+  flex:1;
+}
+.dish__price{
+  align-self:flex-start;
+  font-family:"Bebas Neue",sans-serif;
+  font-size:16px;
+  letter-spacing:.1em;
+  padding:5px 12px;
+  border:1px solid currentColor;
+  border-radius:999px;
+  opacity:.8;
+}
+
+/* ============================================================
+   品牌故事
+   ============================================================ */
+.story{
+  background:var(--c-cream);
+  padding:120px clamp(20px,5vw,60px);
+  position:relative;
+  overflow:hidden;
+}
+.story__wrap{
+  max-width:var(--maxw);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:5fr 7fr;
+  gap:60px;
+  align-items:center;
+}
+.story__visual{
+  position:relative;
+  aspect-ratio:1;
+  display:flex;align-items:center;justify-content:center;
+}
+.story__visual img{
+  position:relative;z-index:2;
+  width:80%;
+  filter:drop-shadow(0 20px 30px rgba(91,13,4,.3));
+  animation:spinSlow 60s linear infinite;
+}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+.story__visual-bg{
+  position:absolute;inset:0;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(217,164,65,.3) 0%, transparent 65%);
+}
+.story__copy{
+  color:var(--c-red-deep);
+}
+.story__eyebrow{
+  font-family:"Bebas Neue",sans-serif;
+  letter-spacing:.5em;
+  color:var(--c-gold);
+  font-size:14px;
+  margin-bottom:18px;
+}
+.story__copy h2{
+  font-size:clamp(28px,3.5vw,44px);
+  line-height:1.25;
+  color:var(--c-red);
+  margin-bottom:24px;
+}
+.story__copy p{
+  margin-bottom:16px;
+  font-size:15px;
+  color:var(--c-ink);
+}
+.story__list{
+  margin-top:28px;
+  display:grid;gap:10px;
+}
+.story__list li{
+  padding:14px 18px;
+  background:#fff;
+  border-left:4px solid var(--c-gold);
+  border-radius:6px;
+  font-size:14px;
+  color:var(--c-ink);
+}
+.story__list strong{color:var(--c-red);margin-right:10px}
+
+/* ============================================================
+   聯絡訂閱
+   ============================================================ */
+.contact{
+  background:var(--c-red-deep);
+  color:var(--c-cream);
+  padding:100px clamp(20px,5vw,60px);
+  text-align:center;
+}
+.contact__inner{max-width:640px;margin:0 auto}
+.contact h2{
+  font-size:clamp(32px,4.5vw,56px);
+  margin-bottom:16px;
+  color:var(--c-cream);
+}
+.contact > .contact__inner > p{
+  opacity:.8;
+  margin-bottom:36px;
+  font-size:15px;
+}
+.contact__form{
+  display:flex;gap:10px;
+  background:rgba(255,255,255,.08);
+  padding:8px;
+  border-radius:999px;
+  border:1px solid rgba(246,231,200,.2);
+}
+.contact__field{flex:1;display:flex;align-items:center}
+.contact__field span{
+  padding:0 16px;
+  font-family:"Bebas Neue",sans-serif;
+  letter-spacing:.2em;
+  color:var(--c-gold);
+  font-size:13px;
+}
+.contact__field input{
+  flex:1;
+  background:transparent;
+  border:0;outline:0;
+  color:#fff;
+  font-size:15px;
+  padding:14px 8px;
+}
+.contact__field input::placeholder{color:rgba(246,231,200,.4)}
+.contact__form button{
+  padding:0 26px;
+  background:var(--c-gold);
+  color:var(--c-red-deep);
+  border-radius:999px;
+  font-weight:700;
+  font-size:14px;
+  letter-spacing:.1em;
+  transition:transform .2s, background .2s;
+}
+.contact__form button:hover{background:#f0bc5e;transform:translateY(-1px)}
+.contact__output{
+  display:block;
+  margin-top:18px;
+  min-height:20px;
+  font-size:14px;
+  color:var(--c-gold);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer{
+  background:#2d0905;
+  color:var(--c-cream);
+  padding:60px clamp(20px,5vw,60px) 30px;
+}
+.footer__inner{
+  max-width:var(--maxw);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:40px;
+  padding-bottom:40px;
+  border-bottom:1px solid rgba(246,231,200,.12);
+}
+.footer__brand{display:flex;align-items:center;gap:14px}
+.footer__brand img{width:64px;height:64px}
+.footer__brand p{font-size:14px;opacity:.7;line-height:1.6}
+.footer__cols{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+.footer__cols h4{
+  font-family:"Bebas Neue",sans-serif;
+  letter-spacing:.3em;
+  color:var(--c-gold);
+  font-size:14px;
+  margin-bottom:14px;
+}
+.footer__cols a{
+  display:block;
+  font-size:14px;
+  padding:6px 0;
+  opacity:.7;
+  transition:opacity .2s, color .2s;
+}
+.footer__cols a:hover{opacity:1;color:var(--c-gold)}
+.footer__copy{
+  max-width:var(--maxw);
+  margin:30px auto 0;
+  font-size:12px;
+  opacity:.5;
+  text-align:center;
+}
+
+/* ============================================================
+   Scroll Reveal
+   ============================================================ */
+.reveal{
+  opacity:0;
+  transform:translateY(30px);
+  transition:opacity .8s var(--ease), transform .8s var(--ease);
+}
+.reveal.is-visible{opacity:1;transform:none}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1024px){
+  .pillars__grid{grid-template-columns:repeat(2,1fr)}
+  .pillars__grid .pillar:last-child{grid-column:1/-1}
+  .dish-grid{grid-template-columns:repeat(2,1fr)}
+  .story__wrap{grid-template-columns:1fr;gap:40px;text-align:center}
+  .story__visual{max-width:360px;margin:0 auto}
+  .story__list{text-align:left}
+  .footer__inner{grid-template-columns:1fr;text-align:center}
+  .footer__brand{justify-content:center}
+}
+@media (max-width:768px){
+  /* 漢堡選單：蓋滿剩餘 viewport，不留下方搜尋框露出 */
+  .navbar__menu{
+    position:fixed;
+    top:74px;left:0;right:0;
+    height:calc(100vh - 74px);
+    flex-direction:column;
+    align-items:flex-start;
+    padding:20px 24px 40px;
+    background:rgba(246,231,200,.98);
+    backdrop-filter:blur(12px);
+    transform:translateY(-110%);
+    transition:transform .35s var(--ease);
+    gap:6px;
+    overflow-y:auto;
+  }
+  .navbar__menu a{padding:18px 0;width:100%;border-bottom:1px solid rgba(91,13,4,.12);font-size:18px}
+  .navbar.is-open .navbar__menu{transform:translateY(0)}
+  .navbar__toggle{display:flex}
+
+  /* Hero 大爆版手機收斂：KV 後撤、字級降下 */
+  .hero{padding:120px 20px 60px}
+  .hero__title{font-size:clamp(44px,11vw,72px)}
+  .hero__lede{font-size:14px;margin:24px 0 28px;padding-left:12px}
+  .hero__ripple--1{top:auto;bottom:-5%;right:-30%;width:60%;opacity:.25}
+  .hero__ripple--2{display:none}
+  .hero__ripple--3{display:none}
+  .hero__sun{top:-20vh;right:-30vw;width:80vh;height:80vh}
+
+  /* 食物拼貼手機版：全部下移到 hero 底部，標題區絕對淨空 */
+  .hero__food--1,
+  .hero__food--2,
+  .hero__food--5,
+  .hero__food--6,
+  .hero__food--7,
+  .hero__food--8,
+  .hero__food--9,
+  .hero__food--10,
+  .hero__food--11,
+  .hero__food--14{display:none}
+  .hero__food--3 {top: 78%; right:-16%; width:38%; opacity:.55}
+  .hero__food--4 {top: 70%; left: -16%; width:36%; opacity:.45}
+  .hero__food--12{top: 92%; right: -8%; width:32%; opacity:.55}
+  .hero__food--13{top: 90%; left:  -8%; width:34%; opacity:.6}
+
+  .hero__stamp{
+    top:auto;bottom:24px;right:20px;
+    width:72px;height:72px;
+  }
+  .hero__stamp-zh{font-size:28px}
+  .hero__stamp-en{font-size:8px}
+  .search{grid-template-columns:1fr;border-radius:24px;padding:10px}
+  .search__field{border-radius:14px}
+  .search__submit{padding:14px 28px;border-radius:14px;justify-content:center}
+
+  .pillars__grid{grid-template-columns:1fr}
+  .pillars__grid .pillar:last-child{grid-column:auto}
+  .dish-grid{grid-template-columns:1fr}
+  .footer__cols{grid-template-columns:1fr 1fr}
+
+  .contact__form{flex-direction:column;border-radius:18px}
+  .contact__field{flex-direction:column;align-items:stretch;gap:0;padding:8px}
+  .contact__field span{padding:4px 0;text-align:center}
+  .contact__form button{padding:14px;border-radius:14px}
+}
+@media (max-width:480px){
+  .footer__cols{grid-template-columns:1fr}
+  .hero__tags{flex-direction:column;align-items:flex-start}
+}
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+
+/* ============================================================
+   閒置門檻小遊戲「台味接接樂」
+   ============================================================ */
+.cgame{
+  position:fixed;inset:0;z-index:9000;
+  display:flex;align-items:center;justify-content:center;padding:18px;
+  background:rgba(43,20,16,.82);backdrop-filter:blur(6px);
+}
+.cgame[hidden]{display:none}
+.cgame__panel{
+  position:relative;
+  width:min(760px,96vw);height:min(86vh,720px);
+  display:flex;flex-direction:column;overflow:hidden;
+  background:linear-gradient(160deg,#7a1209,#5b0d04);
+  border:2px solid var(--c-gold);border-radius:24px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);color:var(--c-cream);
+}
+.cgame__bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 22px;border-bottom:1px solid rgba(217,164,65,.3);
+}
+.cgame__title{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;color:var(--c-gold)}
+.cgame__score{font-family:"Bebas Neue",sans-serif;letter-spacing:.08em;font-size:18px}
+.cgame__score b{color:var(--c-gold);font-size:24px;margin:0 2px}
+
+.cgame__field{
+  position:relative;flex:1;overflow:hidden;cursor:pointer;touch-action:none;
+  background:radial-gradient(circle at 50% 0%, rgba(217,164,65,.16), transparent 62%);
+}
+.cgame__basket{
+  position:absolute;left:0;bottom:8px;width:110px;height:70px;
+  display:flex;align-items:flex-end;justify-content:center;
+  font-size:64px;line-height:1;pointer-events:none;will-change:transform;
+  filter:drop-shadow(0 6px 8px rgba(0,0,0,.45));
+}
+.cgame__item{
+  position:absolute;top:0;left:0;width:84px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  padding:8px 6px;border-radius:14px;
+  background:#fff;color:var(--c-ink);box-shadow:0 8px 16px rgba(0,0,0,.3);
+  pointer-events:none;will-change:transform;
+}
+.cgame__item-e{font-size:34px;line-height:1}
+.cgame__item-n{font-size:13px;font-weight:700;white-space:nowrap}
+
+.cgame__hint{text-align:center;font-size:13px;padding:10px;color:rgba(246,231,200,.8)}
+
+.cgame__flash{
+  position:absolute;font-weight:900;font-size:18px;pointer-events:none;z-index:5;
+  text-shadow:0 2px 6px rgba(0,0,0,.5);animation:cgFlash .7s ease forwards;
+}
+.cgame__flash.is-good{color:#7ee08a}
+.cgame__flash.is-bad{color:#ff9b8a}
+@keyframes cgFlash{
+  0%{opacity:0;transform:translateY(10px) scale(.8)}
+  20%{opacity:1;transform:translateY(0) scale(1.1)}
+  100%{opacity:0;transform:translateY(-32px)}
+}
+
+.cgame__overlayscreen{
+  position:absolute;inset:0;z-index:6;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  text-align:center;padding:30px;
+  background:rgba(43,20,16,.72);backdrop-filter:blur(3px);
+}
+.cgame__overlayscreen[hidden]{display:none}   /* 蓋過 display:flex，讓 hidden 生效 */
+.cgame__overlayscreen h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(24px,4vw,30px);color:var(--c-gold)}
+.cgame__overlayscreen p{max-width:46ch;line-height:1.7;color:var(--c-cream);font-size:15px}
+.cgame__btn{
+  margin-top:8px;padding:14px 32px;border-radius:999px;
+  background:var(--c-gold);color:var(--c-red-deep);font-weight:700;font-size:17px;
+  cursor:pointer;transition:transform .2s var(--ease), background .2s;
+}
+.cgame__btn:hover{transform:translateY(-2px);background:#e8b855}
+.cgame__skip{
+  position:absolute;bottom:10px;right:16px;z-index:7;
+  background:transparent;color:rgba(246,231,200,.6);font-size:12px;
+  text-decoration:underline;cursor:pointer;
+}
+.cgame__skip:hover{color:var(--c-cream)}
+
+.footer__game{color:var(--c-gold);text-decoration:none}
+.footer__game:hover{text-decoration:underline}
+
+@media (max-width:560px){
+  .cgame__panel{height:90vh}
+  .cgame__item{width:74px}
+  .cgame__item-e{font-size:28px}
+  .cgame__item-n{font-size:12px}
+  .cgame__basket{width:92px;font-size:54px}
+}
+@media (prefers-reduced-motion: reduce){
+  .cgame__flash{animation:none;opacity:1}
+}

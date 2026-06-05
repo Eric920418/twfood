@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>美食詳情｜TAI FOOD</title>
+<meta name="description" content="TAI FOOD 美食詳情：菜色介紹、食材拆解，以及哪裡吃得到。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="dish-page">
+
+<!-- ░░░ 導覽列（實心版） ░░░ -->
+<header id="navbar" class="navbar is-solid" aria-label="主導覽">
+  <a href="index.html" class="navbar__brand" aria-label="回到首頁">
+    <img src="assets/3.png" alt="TAI FOOD" />
+    <span class="navbar__brand-text">TAI<br/>FOOD</span>
+  </a>
+  <nav class="navbar__menu" aria-label="主選單">
+    <a href="index.html#home">首頁</a>
+    <a href="index.html#salty">鹹點</a>
+    <a href="index.html#sweet">甜點</a>
+    <a href="index.html#drink">飲品</a>
+    <a href="index.html#story">品牌故事</a>
+    <a href="index.html#contact">聯絡</a>
+  </nav>
+  <button id="navToggle" class="navbar__toggle" type="button" aria-label="開啟選單" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main id="dishPage" class="dpage">
+  <a class="dpage__back" href="index.html#top">← 回美食列表</a>
+  <article id="dishDetail" class="ddetail" aria-live="polite"><!-- 由 dish.js 依 ?d= 產生 --></article>
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <img src="assets/3.png" alt="TAI FOOD" />
+      <p>TAI FOOD · 讓世界看見台灣的味道</p>
+    </div>
+    <div class="footer__cols">
+      <div>
+        <h4>分類</h4>
+        <a href="index.html#salty">鹹點</a>
+        <a href="index.html#sweet">甜點</a>
+        <a href="index.html#drink">飲品</a>
+      </div>
+      <div>
+        <h4>關於</h4>
+        <a href="index.html#story">品牌故事</a>
+        <a href="index.html#contact">聯絡我們</a>
+      </div>
+    </div>
+  </div>
+  <p class="footer__copy">© 2026 TAI FOOD · 本網站為作業專案，所有插畫素材來自原作者。</p>
+</footer>
+
+<script src="data.js"></script>
+<script src="dish.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
