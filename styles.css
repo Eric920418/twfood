@@ -260,7 +260,8 @@ ul{margin:0;padding:0;list-style:none}
   display:block;
   width:100%;
   height:auto;
-  filter:drop-shadow(0 14px 28px rgba(0,0,0,.45)) drop-shadow(0 0 18px rgba(217,164,65,.18));
+  /* 單層陰影：第二層金色光暈視覺上幾乎不可見，但 filter 成本是雙倍 */
+  filter:drop-shadow(0 14px 28px rgba(0,0,0,.45));
   transform:rotate(var(--rot,0deg));
   animation:foodFloat var(--float-dur,7s) ease-in-out var(--float-delay,0s) infinite;
   will-change:transform;
@@ -1835,4 +1836,35 @@ ul{margin:0;padding:0;list-style:none}
 }
 @media (prefers-reduced-motion: reduce){
   .cgame__flash{animation:none;opacity:1}
+}
+
+/* ============================================================
+   LITE 模式（舊機降級）— script.js 開頭量測 FPS < 34 自動加 html.is-lite
+   原則：版面與內容完全不變，只關掉「持續燒 GPU」的效果。
+   一次性的進場動畫（heroFadeUp、reveal）保留，因為跑完就停。
+   ============================================================ */
+html.is-lite{scroll-behavior:auto}
+
+/* 無限動畫全停：splash 呼吸／太陽呼吸／食物浮動／印章搖擺 */
+html.is-lite .splash__bg,
+html.is-lite .hero__sun,
+html.is-lite .hero__stamp,
+html.is-lite .hero__food img{animation:none !important}
+
+/* foodBoom 用 forwards 撐住 opacity，直接停動畫要補回最終態 */
+html.is-lite .hero__food{animation:none !important;opacity:1;translate:none;will-change:auto}
+
+/* 噪點混合層：blend 逼整個 hero 逐格重組，舊 GPU 最大殺手 */
+html.is-lite .hero__grain{display:none}
+
+/* 視差層回到原位、卸掉合成層與 filter（JS 端同步停用視差監聽） */
+html.is-lite .hero__ripple,
+html.is-lite .hero__watermark{translate:none;filter:none;will-change:auto}
+html.is-lite .hero__food img{filter:drop-shadow(0 8px 14px rgba(0,0,0,.35));will-change:auto}
+
+/* 毛玻璃改實色：backdrop-filter 在舊機是每幀重算 */
+html.is-lite .navbar.is-solid{
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+  background:rgba(246,231,200,.98);
 }

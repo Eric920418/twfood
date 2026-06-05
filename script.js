@@ -7,6 +7,31 @@
 
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+  /* ---------- 00. Lite 模式（舊機降級）----------
+   * 開頭 1.5 秒用 rAF 實測 FPS；低於 34 → <html> 加 .is-lite，
+   * CSS 端關掉所有持續燒 GPU 的效果（無限動畫／噪點混合／視差／毛玻璃）。
+   * 用實測而非 UA 嗅探：判斷的是「這台機器扛不扛得動」，不是「是什麼瀏覽器」。
+   * 結果存 sessionStorage，同分頁工作階段不重測。 */
+  const docEl = document.documentElement;
+  const isLite = () => docEl.classList.contains('is-lite');
+  (function liteProbe() {
+    try {
+      if (sessionStorage.getItem('taifood_lite') === '1') { docEl.classList.add('is-lite'); return; }
+      if (sessionStorage.getItem('taifood_lite') === '0') return;   // 已測過、機器夠力
+    } catch (e) { /* 隱私模式：每次重測 */ }
+    let frames = 0, t0 = 0;
+    function tick(now) {
+      if (!t0) { t0 = now; requestAnimationFrame(tick); return; }
+      frames++;
+      if (now - t0 < 1500) { requestAnimationFrame(tick); return; }
+      const fps = frames * 1000 / (now - t0);
+      const lite = fps < 34;
+      if (lite) docEl.classList.add('is-lite');
+      try { sessionStorage.setItem('taifood_lite', lite ? '1' : '0'); } catch (e) {}
+    }
+    requestAnimationFrame(tick);
+  })();
+
   /* ---------- 0. 依 data.js 的 DISHES 產生菜卡（鹹點／飲品為格線；甜點為圓桌轉盤） ---------- */
   document.querySelectorAll('.dish-grid[data-cat]').forEach(grid => {
     const cat = grid.dataset.cat;
@@ -544,6 +569,7 @@
   if (hero && parallaxEls.length && !reduceMotion && window.matchMedia('(pointer:fine)').matches) {
     let mouseRaf = 0;
     hero.addEventListener('mousemove', (e) => {
+      if (isLite()) return;   // 舊機降級：滑鼠視差停用
       const r = hero.getBoundingClientRect();
       const nx = (e.clientX - r.left) / r.width - 0.5;
       const ny = (e.clientY - r.top) / r.height - 0.5;
@@ -578,6 +604,7 @@
   if (hero && parallaxEls.length && !reduceMotion) {
     let scrollRaf = 0;
     const onParallaxScroll = () => {
+      if (isLite()) return;   // 舊機降級：滾動視差停用
       if (scrollRaf) return;
       scrollRaf = requestAnimationFrame(() => {
         const r = hero.getBoundingClientRect();

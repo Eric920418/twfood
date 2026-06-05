@@ -455,6 +455,15 @@ Mac Safari 曾出現「整頁抖動」，根因與修法（Chrome 容忍這些�
 
 **鐵律**：被 JS 高頻改寫的 CSS 變數，**絕不放進 `@keyframes`**；高頻位移一律走獨立 `translate` 屬性（Safari 14.1+）。
 
+### 8. Lite 模式（舊機自動降級）
+寫法修正後舊 MacBook 仍抖——根因不同：**老 GPU 扛不動效果總量**（6 個無限動畫 + 14 個合成層 + 噪點混合 + 毛玻璃），寫法再正確也掉幀。解法是 **adaptive quality**：
+
+- **偵測**（`script.js` 開頭）：載入後 1.5 秒用 `requestAnimationFrame` 實測 FPS，**< 34 fps** → `<html>` 加 `.is-lite`，結果存 `sessionStorage`（同分頁不重測）。用實測不用 UA 嗅探——判斷「這台機器扛不扛得動」，不是「是什麼瀏覽器」。
+- **降級內容**（`styles.css` 底部 `html.is-lite` 區塊）：停掉所有**無限**動畫（splash／太陽呼吸、食物浮動、印章搖擺）、移除噪點混合層、視差停用（JS 監聽器同步早退）、毛玻璃改實色、陰影減量。**版面與內容完全不變**；一次性進場動畫（heroFadeUp、reveal）保留。
+- 基線優化：食物圖雙層 drop-shadow 改單層（第二層金色光暈視覺上幾乎不可見，成本卻是雙倍）。
+
+> 測試技巧：在 DevTools console 執行 `sessionStorage.setItem('taifood_lite','1')` 後重整即可強制預覽 Lite 模式；`sessionStorage.clear()` 還原。
+
 ---
 
 ## 已知限制
