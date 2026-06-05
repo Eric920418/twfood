@@ -582,7 +582,8 @@
       scrollRaf = requestAnimationFrame(() => {
         const r = hero.getBoundingClientRect();
         if (r.bottom > 0 && r.top < window.innerHeight) {
-          const progress = -r.top / window.innerHeight;
+          // clamp：Mac Safari 橡皮筋過捲時 r.top 會 > 0（progress 變負），不 clamp 圖層會跟著彈跳
+          const progress = clamp(-r.top / window.innerHeight, 0, 1);
           parallaxEls.forEach(el => {
             const s = layerState.get(el);
             s.sy = -progress * s.depth * 400;

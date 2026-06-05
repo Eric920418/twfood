@@ -416,7 +416,7 @@ Webhomework/
 5. **內容層** — 標題、搜尋框、印章；標題用 `background-clip:text` 做金箔漸層 + `::before/::after` 兩層紅色重影製造立體感
 
 關鍵手法：
-- **雙層 div 結構解決 transform 衝突**：每張食物 `<div class="hero__food"><img></div>`，外層接視差（`translate3d(var(--px),var(--py),0)`），內層接旋轉 + floating，互不覆蓋
+- **雙層 div 結構解決 transform 衝突**：每張食物 `<div class="hero__food"><img></div>`，外層接視差（獨立屬性 `translate:var(--px) var(--py)`），內層接旋轉 + floating，互不覆蓋
 - **食物只佈右側**：移除原本壓在標題與左下角的 5 張（原 6/7/8/13/14），讓左側標題欄淨空，解決「美食」二字被菜壓住的可讀性問題
 - **`foodBoom` 階梯爆出**：9 張用 `--delay:60ms~720ms` 依序進場，每張從 `--from-x/--from-y` 自訂方向飛入，做出鏡頭聚焦感
 - **`foodFloat` 異步浮動**：每張 `--float-dur:5.8s~8.5s` + `--float-delay:.1s~.9s` 不同，避免機械感
@@ -424,6 +424,20 @@ Webhomework/
 - 標題的「美食」使用 `data-text="美食"`，用 `content:attr(data-text)` 在偽元素複製做重影，HTML 不重複
 - **背景漸層提亮**：金色光暈比例調高、紅色基底略亮，整體不再過暗
 - 所有動畫在 `prefers-reduced-motion:reduce` 下停用
+
+### 7. Safari（WebKit）抖動修正
+Mac Safari 曾出現「整頁抖動」，根因與修法（Chrome 容忍這些寫法、Safari 不會）：
+
+| 問題 | 原因 | 修法 |
+|------|------|------|
+| 全部食物圖閃爍抖動 | `@keyframes foodBoom` 結尾畫格引用 `var(--px)/var(--py)` 且 `fill:forwards`，JS 又以 60fps 改寫這兩個變數 → WebKit 反覆重算動畫 | 視差改走**獨立變換屬性** `translate:var(--px) var(--py)`（與 `transform` 互不干擾），keyframe 結尾改 `transform:none`，不再引用會被 JS 改寫的變數 |
+| 滾動掉幀 | `wmSpin` 動畫 `filter:drop-shadow`（無法 GPU 合成，逐格全頁重繪），且浮水印 opacity .08 根本看不出脈動 | 直接移除 `wmSpin`，保留靜態 drop-shadow |
+| 滾動掉幀 | `.hero__sun` 90vh 巨型元素掛 `blur(20px)` 還做 scale 動畫，每格重新點陣化 | 移除 blur（radial-gradient 本身已是軟邊，視覺等效） |
+| hero 整塊重繪 | `.hero__grain` 的 `mix-blend-mode:overlay` 拖著下方動畫層 | 加 `transform:translateZ(0)` 自成合成層 |
+| navbar 毛玻璃失效 | `backdrop-filter` 沒加前綴（Safari 18 前不支援裸寫） | 補 `-webkit-backdrop-filter` |
+| 頁面頂端回彈時 hero 圖層跟著彈跳 | Mac Safari 橡皮筋過捲讓視差 progress 變負值 | `script.js` 視差 progress `clamp(0,1)` |
+
+**鐵律**：被 JS 高頻改寫的 CSS 變數，**絕不放進 `@keyframes`**；高頻位移一律走獨立 `translate` 屬性（Safari 14.1+）。
 
 ---
 
