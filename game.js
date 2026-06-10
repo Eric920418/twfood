@@ -1,14 +1,13 @@
-/* TAI FOOD · game.js — 閒置門檻小遊戲「台味接接樂」
- * 長時間未操作 → 全頁覆蓋；接住台灣美食 +10，滿 50 分恢復正常。
- * index.html 與 dish.html 共用；純 DOM + requestAnimationFrame，無套件。
+/* TAI FOOD · game.js — 互動小遊戲「台味接接樂」
+ * 由 header 的「🎮 接接樂」按鈕（任何 [data-play-game] 元素）開啟全頁覆蓋層；
+ * 接住台灣美食 +10，滿 50 分過關。index.html 與 dish.html 共用；
+ * 純 DOM + requestAnimationFrame，無套件。
  */
 (() => {
   'use strict';
 
-  const IDLE_MS = 60000;     // 閒置 60 秒觸發
-  const WIN_SCORE = 50;      // 滿 50 分解鎖
+  const WIN_SCORE = 50;      // 滿 50 分過關
   const HIT_POINTS = 10;
-  const PASSED_KEY = 'taifood_game_passed';
 
   // 台灣味（名稱取自本站菜單）。emoji 故意有重複（🍜），逼玩家讀名稱判斷。
   const TW = [
@@ -31,11 +30,8 @@
   let items = [];           // {el, x, y, w, h, isTW}
   let basketX = 0, BW = 110, BH = 70;
   let raf = 0, lastTs = 0, lastSpawn = 0;
-  let idleTimer = 0;
 
   const rand = (a, b) => a + Math.random() * (b - a);
-  const passed = () => { try { return sessionStorage.getItem(PASSED_KEY) === '1'; } catch (e) { return false; } };
-  const setPassed = () => { try { sessionStorage.setItem(PASSED_KEY, '1'); } catch (e) {} };
 
   /* ---------- 建立覆蓋層（首次啟動時） ---------- */
   function build() {
@@ -57,12 +53,12 @@
     field.append(basket);
 
     hintEl = el('p', 'cgame__hint');
-    hintEl.textContent = '移動籃子接住「台灣美食」，接錯不扣分。滿 ' + WIN_SCORE + ' 分解鎖網站。';
+    hintEl.textContent = '移動籃子接住「台灣美食」，接錯不扣分。滿 ' + WIN_SCORE + ' 分過關。';
 
     // intro
     introEl = el('div', 'cgame__overlayscreen');
-    const i1 = el('h2'); i1.textContent = '🍽️ 你離開太久了！';
-    const i2 = el('p'); i2.textContent = '玩個「台味接接樂」醒醒腦——各國美食掉下來，只接「台灣味」，每對 +10 分，滿 50 分回到網站。';
+    const i1 = el('h2'); i1.textContent = '🎮 台味接接樂';
+    const i2 = el('p'); i2.textContent = '各國美食從天而降，只接「台灣味」，每對 +10 分，滿 ' + WIN_SCORE + ' 分過關。隨時可按右上角關閉。';
     const iBtn = el('button', 'cgame__btn'); iBtn.type = 'button'; iBtn.textContent = '開始遊戲';
     iBtn.addEventListener('click', startPlay);
     introEl.append(i1, i2, iBtn);
@@ -73,12 +69,13 @@
     const w2 = el('p'); w2.textContent = '';
     winScoreEl = w2;
     const w3 = el('p'); w3.textContent = '你證明了你真的懂台灣味。';
-    const wBtn = el('button', 'cgame__btn'); wBtn.type = 'button'; wBtn.textContent = '恢復正常使用 →';
-    wBtn.addEventListener('click', () => { setPassed(); close(); });
+    const wBtn = el('button', 'cgame__btn'); wBtn.type = 'button'; wBtn.textContent = '關閉遊戲 →';
+    wBtn.addEventListener('click', close);
     winEl.append(w1, w2, w3, wBtn);
 
-    const skip = el('button', 'cgame__skip'); skip.type = 'button'; skip.textContent = '略過遊戲';
-    skip.addEventListener('click', () => { setPassed(); close(); });
+    const skip = el('button', 'cgame__skip'); skip.type = 'button'; skip.textContent = '關閉';
+    skip.setAttribute('aria-label', '關閉遊戲');
+    skip.addEventListener('click', close);
 
     panel.append(bar, field, hintEl, introEl, winEl, skip);
     root.append(panel);
@@ -111,7 +108,6 @@
     items.forEach(it => it.el.remove()); items = [];
     if (root) root.hidden = true;
     document.body.style.overflow = '';
-    resetIdle();
   }
 
   function startPlay() {
@@ -214,26 +210,19 @@
     if (!open) return;
     if (e.key === 'ArrowLeft') { basketX = clamp(basketX - 40, 0, field.clientWidth - BW); placeBasket(); }
     else if (e.key === 'ArrowRight') { basketX = clamp(basketX + 40, 0, field.clientWidth - BW); placeBasket(); }
+    else if (e.key === 'Escape') { close(); }
   }
   function placeBasket() { if (basket) basket.style.transform = `translateX(${basketX}px)`; }
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
-  /* ---------- 閒置偵測 ---------- */
-  function resetIdle() {
-    clearTimeout(idleTimer);
-    if (open || passed()) return;
-    idleTimer = setTimeout(launch, IDLE_MS);
-  }
-  ['mousemove', 'keydown', 'scroll', 'click', 'touchstart', 'wheel', 'pointerdown'].forEach(ev =>
-    window.addEventListener(ev, resetIdle, { passive: true }));
-  resetIdle();
-
-  // 手動開（index footer 連結）；也方便測試
+  /* ---------- 開啟入口 ----------
+   * 點任何帶 [data-play-game] 的元素即開啟（header 按鈕、footer 連結皆可）。
+   * 不再有閒置自動觸發——遊戲完全由使用者主動開啟。 */
   document.addEventListener('click', (e) => {
     const t = e.target.closest && e.target.closest('[data-play-game]');
     if (t) { e.preventDefault(); launch(); }
   });
 
-  // 對外測試掛點（可在 console 用 window.TAIGAME.launch() / setIdle(ms)）
+  // 對外測試掛點（可在 console 用 window.TAIGAME.launch() / close()）
   window.TAIGAME = { launch, close, get score() { return score; } };
 })();

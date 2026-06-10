@@ -89,6 +89,7 @@ ul{margin:0;padding:0;list-style:none}
   top:0;left:0;right:0;
   z-index:50;
   display:flex;align-items:center;justify-content:space-between;
+  gap:clamp(12px,1.6vw,24px);
   padding:14px clamp(20px,4vw,48px);
   background:var(--c-cream);
   border-bottom:1px solid rgba(91,13,4,.12);
@@ -125,7 +126,7 @@ ul{margin:0;padding:0;list-style:none}
   color:var(--c-red-deep);
   font-weight:700;
 }
-.navbar__menu{display:flex;align-items:center;gap:clamp(14px,2vw,32px)}
+.navbar__menu{display:flex;align-items:center;gap:clamp(14px,2vw,32px);margin-left:auto}
 .navbar__menu a{
   position:relative;
   color:var(--c-red-deep);
@@ -144,6 +145,29 @@ ul{margin:0;padding:0;list-style:none}
 .navbar__menu a:hover::after,
 .navbar__menu a.is-active::after{left:0;right:0}
 .navbar__menu a:hover{color:var(--c-red)}
+
+/* header 遊戲按鈕：主動開啟「台味接接樂」覆蓋層 */
+.navbar__game{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 16px;
+  border:none;border-radius:999px;
+  background:var(--c-red);
+  color:var(--c-cream);
+  font-family:var(--font-sans);font-weight:700;
+  font-size:15px;letter-spacing:.02em;
+  cursor:pointer;
+  box-shadow:0 6px 16px -8px rgba(91,13,4,.6);
+  transition:transform .2s var(--ease), background .2s var(--ease), box-shadow .2s var(--ease);
+}
+.navbar__game:hover{
+  background:var(--c-red-deep);
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px -8px rgba(91,13,4,.7);
+}
+.navbar__game:active{transform:translateY(0)}
+.navbar__game:focus-visible{outline:3px solid var(--c-gold);outline-offset:2px}
+.navbar__game-emoji{font-size:17px;line-height:1}
+
 .navbar__toggle{
   display:none;
   flex-direction:column;gap:5px;
@@ -1683,6 +1707,8 @@ ul{margin:0;padding:0;list-style:none}
   .navbar__menu a{padding:18px 0;width:100%;border-bottom:1px solid rgba(91,13,4,.12);font-size:18px}
   .navbar.is-open .navbar__menu{transform:translateY(0)}
   .navbar__toggle{display:flex}
+  /* 選單變全屏覆蓋層（脫離流）後，改由遊戲按鈕靠右、緊貼漢堡鈕 */
+  .navbar__game{margin-left:auto;padding:8px 14px;font-size:14px}
 
   /* Hero 大爆版手機收斂：KV 後撤、字級降下 */
   .hero{padding:120px 20px 60px}
@@ -1732,6 +1758,9 @@ ul{margin:0;padding:0;list-style:none}
 @media (max-width:480px){
   .footer__cols{grid-template-columns:1fr}
   .hero__tags{flex-direction:column;align-items:flex-start}
+  /* 窄螢幕：遊戲按鈕只留 🎮，省出空間給品牌與漢堡鈕 */
+  .navbar__game{padding:8px 11px}
+  .navbar__game-text{display:none}
 }
 
 /* prefers-reduced-motion */
