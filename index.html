@@ -34,6 +34,10 @@
     <a href="#story">品牌故事</a>
     <a href="#contact">聯絡</a>
   </nav>
+  <button type="button" class="navbar__qr" data-qr-open aria-haspopup="dialog" aria-label="顯示網站 QR Code，點擊放大掃描">
+    <img class="navbar__qr-img" src="assets/qrcode.svg" alt="TAI FOOD 網站 QR Code" width="40" height="40" />
+    <span class="navbar__qr-text">掃我</span>
+  </button>
   <button type="button" class="navbar__game" data-play-game aria-label="開啟小遊戲：台味接接樂">
     <span class="navbar__game-emoji" aria-hidden="true">🎮</span>
     <span class="navbar__game-text">接接樂</span>
@@ -386,6 +390,20 @@
     <a href="#" data-play-game class="footer__game">🎮 台味接接樂</a>
   </p>
 </footer>
+
+<!-- ░░░ QR Code 彈窗（由 header「掃我」按鈕開啟） ░░░ -->
+<div id="qrModal" class="qrmodal" hidden role="dialog" aria-modal="true" aria-labelledby="qrModalTitle">
+  <div class="qrmodal__backdrop" data-qr-close></div>
+  <div class="qrmodal__panel" role="document">
+    <button type="button" class="qrmodal__close" data-qr-close aria-label="關閉 QR Code">×</button>
+    <h2 id="qrModalTitle" class="qrmodal__title">掃描，立即開啟 TAI FOOD</h2>
+    <p class="qrmodal__subtitle">用手機相機對準下方 QR Code</p>
+    <div class="qrmodal__code">
+      <img src="assets/qrcode.svg" alt="TAI FOOD 網站 QR Code，連結至 https://twfood.vercel.app/" />
+    </div>
+    <a class="qrmodal__link" href="https://twfood.vercel.app/" target="_blank" rel="noopener noreferrer">https://twfood.vercel.app/ ↗</a>
+  </div>
+</div>
 
 <script src="data.js"></script>
 <script src="script.js"></script>

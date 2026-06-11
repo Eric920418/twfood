@@ -631,4 +631,40 @@
       toggle?.setAttribute('aria-expanded', 'false');
     }
   });
+
+  /* ---------- 9. Header QR Code 彈窗（點「掃我」放大，可掃描） ---------- */
+  const qrModal = document.getElementById('qrModal');
+  if (qrModal) {
+    let qrLastFocus = null;
+
+    const openQr = () => {
+      qrLastFocus = document.activeElement;
+      qrModal.hidden = false;
+      document.body.classList.add('qr-open');
+      qrModal.querySelector('.qrmodal__close')?.focus();
+    };
+    const closeQr = () => {
+      qrModal.hidden = true;
+      document.body.classList.remove('qr-open');
+      if (qrLastFocus && typeof qrLastFocus.focus === 'function') qrLastFocus.focus();
+    };
+
+    document.querySelectorAll('[data-qr-open]').forEach(b => b.addEventListener('click', openQr));
+    qrModal.querySelectorAll('[data-qr-close]').forEach(b => b.addEventListener('click', closeQr));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !qrModal.hidden) closeQr();
+    });
+
+    // 所有錯誤完整顯示在前端：QR 圖片若載入失敗，直接以文字提示取代
+    document.querySelectorAll('.navbar__qr-img, .qrmodal__code img').forEach(img => {
+      img.addEventListener('error', () => {
+        const holder = img.closest('.navbar__qr, .qrmodal__code');
+        if (!holder) return;
+        const tip = document.createElement('span');
+        tip.className = 'qr-error';
+        tip.textContent = 'QR 載入失敗：assets/qrcode.svg';
+        holder.replaceChildren(tip);
+      });
+    });
+  }
 })();

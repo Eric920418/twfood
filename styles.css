@@ -181,6 +181,98 @@ ul{margin:0;padding:0;list-style:none}
 .navbar.is-open .navbar__toggle span:nth-child(2){opacity:0}
 .navbar.is-open .navbar__toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
+/* header QR 按鈕：顯示小 QR，點擊放大成可掃描彈窗 */
+.navbar__qr{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:5px 12px 5px 5px;
+  border:1px solid rgba(91,13,4,.18);border-radius:999px;
+  background:var(--c-cream);
+  color:var(--c-red-deep);
+  font-family:var(--font-sans);font-weight:700;
+  font-size:14px;letter-spacing:.02em;
+  cursor:pointer;
+  transition:transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
+}
+.navbar__qr-img{
+  width:34px;height:34px;display:block;border-radius:7px;
+  background:#fff;padding:3px;
+  box-shadow:0 2px 6px -3px rgba(91,13,4,.4);
+}
+.navbar__qr:hover{
+  transform:translateY(-2px);
+  border-color:var(--c-red);
+  box-shadow:0 10px 22px -10px rgba(91,13,4,.5);
+}
+.navbar__qr:active{transform:translateY(0)}
+.navbar__qr:focus-visible{outline:3px solid var(--c-gold);outline-offset:2px}
+
+/* QR 彈窗 */
+.qrmodal{
+  position:fixed;inset:0;z-index:120;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+.qrmodal[hidden]{display:none}
+.qrmodal__backdrop{
+  position:absolute;inset:0;
+  background:rgba(43,8,2,.62);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  animation:qrFade .25s var(--ease);
+}
+.qrmodal__panel{
+  position:relative;
+  width:min(92vw,420px);
+  background:var(--c-cream);
+  border:2px solid var(--c-red);
+  border-radius:24px;
+  padding:32px 28px 26px;
+  text-align:center;
+  box-shadow:0 30px 70px -20px rgba(43,8,2,.7);
+  animation:qrPop .3s var(--ease);
+}
+.qrmodal__close{
+  position:absolute;top:12px;right:14px;
+  width:38px;height:38px;
+  border:none;border-radius:50%;
+  background:transparent;color:var(--c-red-deep);
+  font-size:28px;line-height:1;cursor:pointer;
+  transition:background .2s,transform .2s;
+}
+.qrmodal__close:hover{background:rgba(91,13,4,.1);transform:rotate(90deg)}
+.qrmodal__close:focus-visible{outline:3px solid var(--c-gold);outline-offset:2px}
+.qrmodal__title{
+  font-family:var(--font-serif);font-weight:900;
+  font-size:24px;color:var(--c-red-deep);margin:0 0 6px;
+}
+.qrmodal__subtitle{
+  font-family:var(--font-sans);font-size:14px;
+  color:var(--c-red-deep);opacity:.7;margin:0 0 20px;
+}
+.qrmodal__code{
+  width:min(72vw,260px);aspect-ratio:1/1;margin:0 auto 18px;
+  padding:14px;background:#fff;border-radius:16px;
+  box-shadow:0 8px 20px -10px rgba(91,13,4,.45);
+}
+.qrmodal__code img{width:100%;height:100%;display:block}
+.qrmodal__link{
+  display:inline-block;
+  font-family:var(--font-sans);font-weight:700;font-size:15px;
+  color:var(--c-red);text-decoration:none;
+  border-bottom:2px solid transparent;
+  transition:border-color .2s,color .2s;
+}
+.qrmodal__link:hover{color:var(--c-red-deep);border-bottom-color:var(--c-red-deep)}
+/* QR 圖片載入失敗時的前端錯誤提示 */
+.qr-error{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;height:100%;padding:8px;
+  font-family:var(--font-sans);font-size:13px;font-weight:700;
+  color:var(--c-red);text-align:center;
+}
+body.qr-open{overflow:hidden}
+@keyframes qrFade{from{opacity:0}to{opacity:1}}
+@keyframes qrPop{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:none}}
+
 /* ============================================================
    HERO 主搜尋區（大爆版 BOOM）
    ============================================================ */
@@ -1709,6 +1801,8 @@ ul{margin:0;padding:0;list-style:none}
   .navbar__toggle{display:flex}
   /* 選單變全屏覆蓋層（脫離流）後，改由遊戲按鈕靠右、緊貼漢堡鈕 */
   .navbar__game{margin-left:auto;padding:8px 14px;font-size:14px}
+  /* 手機上使用者本身就在手機，掃自己螢幕無意義；隱藏 QR 按鈕、騰出 header 空間 */
+  .navbar__qr{display:none}
 
   /* Hero 大爆版手機收斂：KV 後撤、字級降下 */
   .hero{padding:120px 20px 60px}
